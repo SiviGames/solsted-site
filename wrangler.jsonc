@@ -3,9 +3,11 @@
 {
   "name": "solsted-site",
   "compatibility_date": "2026-01-01",
-  // answers on solsted-site.<account>.workers.dev; once a custom domain is added,
-  // set this to false and list the domain under "routes" with "custom_domain": true
-  "workers_dev": true,
+  // the site answers only on its own subdomain: no *.workers.dev address
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "solstead.youfacta.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./public",
     // /404.html at /404, and old .html addresses redirect to the short ones

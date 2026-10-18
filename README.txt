@@ -16,9 +16,9 @@ Deploy to Cloudflare
   2. dash.cloudflare.com → Workers & Pages → Create → Import a repository → that repository.
   3. Project name: solsted-site (must match "name" in wrangler.jsonc).
      Build command: empty. Deploy command: npx wrangler deploy
-  4. Deploy. The site appears at solsted-site.<your-account>.workers.dev.
-  Own domain: in wrangler.jsonc set "workers_dev": false and add
-  "routes": [{ "pattern": "your-domain", "custom_domain": true }].
+  4. Deploy. The site answers on https://solstead.youfacta.com (the workers.dev address is off).
+  The domain is set in wrangler.jsonc (routes, custom_domain); to change it, edit the pattern:
+  { "pattern": "solstead.youfacta.com", "custom_domain": true }.
 
 Brand, products, prices and figures are fictional (design concept).
 That's why the site is kept out of search engines (X-Robots-Tag: noindex in public/_headers).
