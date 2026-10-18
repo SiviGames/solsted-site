@@ -1,0 +1,16 @@
+// Cloudflare Workers: serves the static site in public/ (no server code).
+// Deployed by "npx wrangler deploy" on every push to main.
+{
+  "name": "solsted-site",
+  "compatibility_date": "2026-01-01",
+  // answers on solsted-site.<account>.workers.dev; once a custom domain is added,
+  // set this to false and list the domain under "routes" with "custom_domain": true
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    // /404.html at /404, and old .html addresses redirect to the short ones
+    "html_handling": "auto-trailing-slash",
+    // unknown addresses get public/404.html with status 404
+    "not_found_handling": "404-page"
+  }
+}

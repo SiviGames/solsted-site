@@ -1,0 +1,1928 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Solstead Energy</title>
+<meta name="description" content="Solar panels and home power stations for Texas homes. Concept site.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: full-bleed bands, content on a 1240px column. Hero = live house scene + instrument deck.
+   The whole site follows the simulated sun: light theme = day shift, dark theme = night shift. */
+:root{
+  --bg:#F3F4EE; --bg-2:#E8EBE2; --surface:#FFFFFF; --surface-2:#F8F9F4;
+  --ink:#11150F; --ink-2:#384035; --muted:#5F675B; --line:#11150F1C; --line-2:#11150F3A;
+  --sun:#FFB21A; --sun-2:#FFD27A; --on-sun:#1A1300; --sun-text:#8A5200;
+  --charge:#087A61; --charge-fill:#13B38F; --grid:#36618F; --danger:#B4321F;
+  --focus:#11150F;
+  --shadow:0 1px 0 #11150F0D, 0 22px 50px -28px #11150F4D;
+  --nav-bg:#F3F4EED9;
+  /* fixed palettes for the always-day / always-night panels */
+  --day-bg:#FFE9A8; --day-bg-2:#FFD872; --day-ink:#1A1300; --day-muted:#5E4A16; --day-line:#1A130029;
+  --night-bg:#0A1120; --night-bg-2:#121C31; --night-ink:#EDF0F5; --night-muted:#A3AEC0; --night-line:#EDF0F526; --night-glow:#46DDB3;
+  /* isometric illustration */
+  --iso-roof-a:#3B4252; --iso-roof-b:#2C3240; --iso-roof-c:#4A5264; --iso-wall-a:#FFFFFF; --iso-wall-b:#DCE0D4;
+  --iso-ground:#DCE3CC; --iso-ground-2:#CBD3BA; --iso-trim:#BFC4B5; --iso-window:#A9C9E2; --iso-canopy:#6F8A52; --iso-canopy-2:#5B7543;
+  --panel:#1B2740; --panel-line:#FFFFFF2E; --vault-body:#ECEEE8; --vault-edge:#C7CBC0;
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r-s:4px; --r-m:10px; --r-l:18px;
+  --wrap:1240px; --nav-h:68px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#080C12; --bg-2:#0E141D; --surface:#111822; --surface-2:#0D131B;
+    --ink:#EEF0E8; --ink-2:#C9CEC6; --muted:#97A0AA; --line:#EEF0E81C; --line-2:#EEF0E838;
+    --sun:#FFB21A; --sun-2:#FFCF70; --on-sun:#1A1300; --sun-text:#FFC657;
+    --charge:#46DDB3; --charge-fill:#2FC79C; --grid:#8DB6E6; --danger:#FF8A70;
+    --focus:#FFC657; --shadow:0 1px 0 #00000000, 0 26px 60px -30px #000000CC; --nav-bg:#080C12D9;
+    --iso-roof-a:#2F3748; --iso-roof-b:#232A38; --iso-roof-c:#3B4458; --iso-wall-a:#36405A; --iso-wall-b:#28303F;
+    --iso-ground:#172231; --iso-ground-2:#121B27; --iso-trim:#3A4354; --iso-window:#FFC46B; --iso-canopy:#1E2E26; --iso-canopy-2:#18261F;
+    --panel:#0C1424; --panel-line:#FFFFFF1F; --vault-body:#1D2430; --vault-edge:#2E3746;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#080C12; --bg-2:#0E141D; --surface:#111822; --surface-2:#0D131B;
+  --ink:#EEF0E8; --ink-2:#C9CEC6; --muted:#97A0AA; --line:#EEF0E81C; --line-2:#EEF0E838;
+  --sun:#FFB21A; --sun-2:#FFCF70; --on-sun:#1A1300; --sun-text:#FFC657;
+  --charge:#46DDB3; --charge-fill:#2FC79C; --grid:#8DB6E6; --danger:#FF8A70;
+  --focus:#FFC657; --shadow:0 1px 0 #00000000, 0 26px 60px -30px #000000CC; --nav-bg:#080C12D9;
+  --iso-roof-a:#2F3748; --iso-roof-b:#232A38; --iso-roof-c:#3B4458; --iso-wall-a:#36405A; --iso-wall-b:#28303F;
+  --iso-ground:#172231; --iso-ground-2:#121B27; --iso-trim:#3A4354; --iso-window:#FFC46B; --iso-canopy:#1E2E26; --iso-canopy-2:#18261F;
+  --panel:#0C1424; --panel-line:#FFFFFF1F; --vault-body:#1D2430; --vault-edge:#2E3746;
+  color-scheme:dark;
+}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-h) + 16px)}
+body{background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow-x:hidden}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:60; background:var(--nav-bg)}
+img,svg{max-width:100%}
+a{color:inherit}
+button,input,select{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--focus); outline-offset:3px; border-radius:3px}
+h1,h2,h3,h4{margin:0; text-wrap:balance; font-family:var(--font-display)}
+p{margin:0}
+.wrap{max-width:calc(var(--wrap) + 2*max(16px, env(safe-area-inset-left,0px))); margin-inline:auto;
+  padding-left:max(24px, env(safe-area-inset-left,0px)); padding-right:max(24px, env(safe-area-inset-right,0px))}
+@media (max-width:560px){ .wrap{padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))} }
+.sr{position:absolute!important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.num{font-family:var(--font-mono); font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+
+.theme-fade, .theme-fade *{transition:background-color .9s ease, color .9s ease, border-color .9s ease, fill .9s ease, stroke .9s ease!important}
+::view-transition-old(root),::view-transition-new(root){animation:none; mix-blend-mode:normal}
+
+/* ---------- type ---------- */
+.eyebrow{font-family:var(--font-display); font-stretch:75%; font-weight:650; font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted); display:flex; align-items:center; gap:10px}
+.eyebrow::before{content:""; width:18px; height:2px; background:var(--sun); flex:none}
+.h-xl{font-stretch:125%; font-weight:800; font-size:clamp(40px,5vw,74px); line-height:.94; letter-spacing:-.025em}
+.h-l{font-stretch:118%; font-weight:780; font-size:clamp(30px,3.5vw,50px); line-height:1; letter-spacing:-.02em}
+.h-m{font-stretch:110%; font-weight:720; font-size:clamp(21px,1.8vw,26px); line-height:1.12; letter-spacing:-.01em}
+.lede{font-size:clamp(17px,1.35vw,19px); line-height:1.55; color:var(--ink-2); max-width:60ch}
+.label{font-family:var(--font-display); font-stretch:75%; font-weight:650; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.sec{padding-block:clamp(80px,9vw,136px)}
+.sec-head{display:grid; gap:18px; margin-bottom:clamp(40px,5vw,64px); max-width:820px}
+
+/* ---------- buttons ---------- */
+.btn{--h:52px; display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:var(--h); padding:0 22px;
+  border-radius:6px; border:1.5px solid transparent; cursor:pointer; text-decoration:none; white-space:nowrap;
+  font-family:var(--font-display); font-stretch:88%; font-weight:700; font-size:15px; letter-spacing:.02em;
+  transition:transform .2s var(--ease), background-color .2s, border-color .2s, box-shadow .2s}
+.btn svg{width:18px; height:18px; flex:none}
+.btn:active{transform:translateY(1px)}
+.btn-sun{background:var(--sun); color:var(--on-sun); box-shadow:0 10px 30px -12px #FFB21AAA}
+.btn-sun:hover{background:var(--sun-2)}
+.btn-sun .arr{transition:transform .25s var(--ease)}
+.btn-sun:hover .arr{transform:translateX(4px)}
+.btn-ghost{background:var(--surface); color:var(--ink); border-color:var(--line-2)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-sm{--h:40px; padding:0 16px; font-size:14px}
+
+/* ---------- nav ---------- */
+.nav{position:sticky; top:env(safe-area-inset-top,0px); z-index:50; height:var(--nav-h); transition:background-color .3s, border-color .3s, backdrop-filter .3s;
+  border-bottom:1px solid transparent}
+.nav.scrolled{background:var(--nav-bg); backdrop-filter:saturate(1.4) blur(14px); -webkit-backdrop-filter:saturate(1.4) blur(14px); border-bottom-color:var(--line)}
+.nav-in{height:100%; display:flex; align-items:center; gap:28px}
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); flex:none}
+.brand-mark{width:34px; height:34px; flex:none}
+.brand-word{display:flex; flex-direction:column; line-height:1}
+.brand-name{font-family:var(--font-display); font-stretch:125%; font-weight:850; font-size:19px; letter-spacing:.02em}
+.brand-sub{font-family:var(--font-display); font-stretch:75%; font-weight:600; font-size:10px; letter-spacing:.24em; color:var(--muted); margin-top:3px}
+.nav-links{display:flex; gap:26px; margin-left:auto; list-style:none; padding:0; margin-block:0}
+.nav-links a{text-decoration:none; font-size:15px; font-weight:500; color:var(--ink-2); padding:6px 0; position:relative}
+.nav-links a::after{content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--sun); transform:scaleX(0); transform-origin:left; transition:transform .25s var(--ease)}
+.nav-links a:hover{color:var(--ink)} .nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{display:flex; align-items:center; gap:14px}
+.mark-sun{fill:var(--sun)} .mark-ink{fill:none; stroke:var(--ink)} .mark-ground{fill:var(--ink)}
+.mark-star{fill:var(--sun); opacity:0; transform-origin:38px 12px; transform:scale(.3); transition:opacity .6s, transform .6s var(--ease)}
+.mark-disc{transition:transform .8s var(--ease)}
+:root[data-night="1"] .mark-disc{transform:translateY(5px)}
+:root[data-night="1"] .mark-star{opacity:1; transform:scale(1)}
+
+/* day/night switch */
+.dn{position:relative; display:inline-flex; align-items:center; width:74px; height:36px; border-radius:999px; border:1.5px solid var(--line-2);
+  background:var(--surface); cursor:pointer; padding:0; flex:none}
+.dn-ico{position:absolute; top:50%; width:16px; height:16px; margin-top:-8px; color:var(--muted); transition:color .3s}
+.dn-ico.sun{left:10px} .dn-ico.moon{right:10px}
+.dn-knob{position:absolute; top:3px; left:3px; width:28px; height:28px; border-radius:50%; background:var(--sun); transition:transform .5s var(--ease), background-color .5s;
+  box-shadow:0 0 0 4px #FFB21A26, 0 0 18px #FFB21A80}
+.dn[aria-checked="true"] .dn-knob{transform:translateX(37px); background:#DCE3EE; box-shadow:0 0 0 4px #DCE3EE1F, 0 0 16px #DCE3EE59}
+.dn[aria-checked="false"] .dn-ico.sun{color:var(--on-sun); z-index:1}
+.dn[aria-checked="true"] .dn-ico.moon{color:#0A1120; z-index:1}
+.menu-btn{display:none; width:44px; height:44px; border-radius:8px; border:1.5px solid var(--line-2); background:var(--surface); cursor:pointer; align-items:center; justify-content:center}
+.menu-btn svg{width:20px; height:20px}
+@media (max-width:1020px){
+  .nav-links{display:none}
+  .nav-cta{margin-left:auto}
+  .menu-btn{display:inline-flex}
+  .nav-links.open{display:flex; position:absolute; top:var(--nav-h); left:0; right:0; flex-direction:column; gap:0; background:var(--surface);
+    border-bottom:1px solid var(--line); padding:8px max(16px, env(safe-area-inset-right,0px)) 16px max(16px, env(safe-area-inset-left,0px)); box-shadow:var(--shadow)}
+  .nav-links.open a{display:block; padding:14px 0; border-bottom:1px solid var(--line); font-size:17px}
+}
+@media (max-width:560px){ .nav-quote{display:none} .brand-sub{display:none} .live-line{font-size:11.5px; border-radius:12px} }
+
+/* ---------- hero ---------- */
+.hero{position:relative; margin-top:calc(-1 * var(--nav-h)); background:var(--sky-top,#5FA2DD)}
+.hero-stage{position:relative}
+.scene{display:block; width:100%; height:clamp(620px,52vw,860px); max-width:100%}
+.hero-copy{position:absolute; inset:0 0 auto 0; padding-top:calc(var(--nav-h) + clamp(40px,5.5vw,84px)); pointer-events:none}
+.hero-copy > *{pointer-events:auto}
+.hero-text{max-width:min(600px,44vw); display:grid; grid-template-columns:minmax(0,1fr); gap:22px}
+.live-line{display:inline-flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:13px; letter-spacing:.02em;
+  color:var(--ink); background:var(--nav-bg); border:1px solid var(--line); padding:7px 12px 7px 10px; border-radius:999px; width:fit-content; max-width:100%;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px)}
+.live-dot{width:8px; height:8px; border-radius:50%; background:var(--charge-fill); box-shadow:0 0 0 0 #13B38F66; animation:pulse 2.2s infinite; flex:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #13B38F80}70%{box-shadow:0 0 0 9px #13B38F00}100%{box-shadow:0 0 0 0 #13B38F00}}
+.hero-h1{display:grid; gap:2px}
+.hero-h1 span{display:block; transition:opacity .8s ease, transform .8s var(--ease)}
+.hero[data-phase="day"] .l-night, .hero[data-phase="night"] .l-day{opacity:.38}
+.hero[data-phase="day"] .l-day, .hero[data-phase="night"] .l-night{opacity:1}
+.hero-lede{font-size:clamp(17px,1.3vw,19px); line-height:1.55; color:var(--ink); max-width:48ch; font-weight:450}
+.hero-cta{display:flex; flex-wrap:wrap; gap:12px}
+.hero-cta .btn-ghost{background:var(--nav-bg); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px)}
+
+/* scene pieces */
+.scene .chip rect{fill:var(--surface); stroke:var(--line-2); stroke-width:1.5}
+.scene .chip text{font-family:var(--font-mono); font-size:17px; fill:var(--ink); font-weight:500}
+.scene .chip .k{font-family:var(--font-display); font-stretch:75%; font-weight:700; font-size:13px; letter-spacing:.14em; fill:var(--muted)}
+.scene .chip, .scene .flow{transition:opacity .5s ease}
+.flow .base{fill:none; stroke-width:3; opacity:.28}
+.flow .dash{fill:none; stroke-width:4.5; stroke-linecap:round; stroke-dasharray:1 13; animation:flow var(--dur,1s) linear infinite; animation-direction:var(--dir,normal)}
+.flow.solar .base,.flow.solar .dash{stroke:var(--sun)}
+.flow.vault .base,.flow.vault .dash{stroke:var(--charge-fill)}
+.flow.grid .base,.flow.grid .dash{stroke:var(--grid)}
+.flow.off{opacity:0}
+@keyframes flow{to{stroke-dashoffset:-28}}
+.mill-wheel{transform-box:fill-box; transform-origin:center; animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cloud{animation:drift var(--cd,140s) linear infinite; animation-delay:var(--cdl,0s)}
+@keyframes drift{0%{transform:translateX(640px);opacity:0}8%{opacity:1}92%{opacity:1}100%{transform:translateX(1820px);opacity:0}}
+.twinkle{animation:tw 3.6s ease-in-out infinite; animation-delay:var(--d,0s)}
+@keyframes tw{50%{opacity:.25}}
+.glint{animation:glint 7s ease-in-out infinite}
+@keyframes glint{0%,30%{transform:translateX(-260px)}70%,100%{transform:translateX(560px)}}
+
+@media (max-width:1179px){
+  .hero{background:linear-gradient(var(--sky-top,#5FA2DD), var(--sky-mid,#8EC0E8))}
+  .hero-stage{display:flex; flex-direction:column}
+  .hero-copy{position:relative; order:-1; padding-top:calc(var(--nav-h) + 36px); padding-bottom:8px}
+  .hero-text{max-width:640px}
+  .scene{height:clamp(300px,58vw,560px)}
+  .scene .chip{display:none}
+}
+
+/* deck */
+.deck-wrap{position:relative; z-index:3; margin-top:-84px; padding-bottom:clamp(40px,5vw,72px); background:linear-gradient(transparent 84px, var(--bg) 84px)}
+.deck{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l); box-shadow:var(--shadow); padding:20px 22px 18px; display:grid; gap:18px}
+.deck-top{display:grid; grid-template-columns:auto auto 1fr; gap:20px; align-items:center}
+.play{width:52px; height:52px; border-radius:50%; border:none; background:var(--ink); color:var(--bg); display:grid; place-items:center; cursor:pointer; transition:transform .2s var(--ease)}
+.play:hover{transform:scale(1.06)}
+.play svg{width:20px; height:20px}
+.play .i-pause{display:none} .play[aria-pressed="true"] .i-pause{display:block} .play[aria-pressed="true"] .i-play{display:none}
+.clock{min-width:150px}
+.clock-time{font-family:var(--font-mono); font-size:30px; font-weight:500; line-height:1; letter-spacing:-.03em; font-variant-numeric:tabular-nums}
+.clock-sub{font-size:13px; color:var(--muted); margin-top:6px; white-space:nowrap}
+.timeline{position:relative; min-width:0}
+.tl-chart{position:relative; height:86px; border-radius:8px; overflow:hidden; background:var(--surface-2); border:1px solid var(--line)}
+.tl-chart svg{position:absolute; inset:0; width:100%; height:100%}
+.tl-night{fill:var(--ink); opacity:.06}
+.tl-solar{fill:var(--sun); opacity:.38}
+.tl-solar-l{fill:none; stroke:var(--sun-text); stroke-width:2}
+.tl-load{fill:none; stroke:var(--ink); stroke-width:1.6; stroke-dasharray:4 3}
+.tl-soc{fill:none; stroke:var(--charge); stroke-width:2.2}
+.tl-cursor{position:absolute; top:0; bottom:0; width:2px; margin-left:-1px; background:var(--ink); pointer-events:none}
+.tl-cursor::before{content:""; position:absolute; top:-1px; left:50%; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:var(--sun); border:2.5px solid var(--ink)}
+.tl-range{position:absolute; left:0; right:0; top:0; height:86px; width:100%; margin:0; opacity:0; cursor:ew-resize}
+.timeline:has(.tl-range:focus-visible) .tl-chart{outline:2px solid var(--focus); outline-offset:2px}
+.tl-axis{position:relative; height:18px; margin-top:6px; font-family:var(--font-mono); font-size:11px; color:var(--muted)}
+.tl-axis span{position:absolute; transform:translateX(-50%); white-space:nowrap}
+.tl-axis span:first-child{transform:none} .tl-axis span:last-child{transform:translateX(-100%)}
+.tl-legend{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12px; color:var(--muted); margin-top:4px}
+.tl-legend i{display:inline-block; width:14px; height:3px; vertical-align:middle; margin-right:6px; border-radius:2px}
+.deck-read{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.25fr); gap:0; border-top:1px solid var(--line); padding-top:16px}
+.read{display:grid; gap:4px; padding:0 18px; border-left:1px solid var(--line); min-width:0}
+.read:first-child{border-left:none; padding-left:0}
+.read-k{display:flex; align-items:center; gap:8px}
+.read-k i{width:10px; height:10px; border-radius:3px; flex:none}
+.r-solar .read-k i{background:var(--sun)} .r-home .read-k i{background:var(--ink)} .r-vault .read-k i{background:var(--charge-fill)} .r-grid .read-k i{background:var(--grid)}
+.read-v{font-family:var(--font-mono); font-size:clamp(22px,2vw,28px); font-weight:500; letter-spacing:-.03em; line-height:1.1; font-variant-numeric:tabular-nums; white-space:nowrap}
+.read-v small{font-size:.5em; color:var(--muted); margin-left:4px; letter-spacing:0}
+.state{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--ink-2); width:max-content; max-width:100%;
+  padding:3px 8px; border-radius:999px; background:var(--bg-2)}
+.state[data-s="up"]{background:#13B38F24; color:var(--charge)}
+.state[data-s="sun"]{background:#FFB21A2E; color:var(--sun-text)}
+.state[data-s="out"]{background:#36618F21; color:var(--grid)}
+.state[data-s="in"]{background:#B4321F1C; color:var(--danger)}
+.today{display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; align-content:start}
+.today .label{grid-column:1/-1}
+.today div{display:flex; justify-content:space-between; gap:8px; font-size:13px; color:var(--muted); border-bottom:1px dashed var(--line); padding-bottom:4px}
+.today b{font-family:var(--font-mono); font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums}
+@media (max-width:1100px){
+  .deck-read{grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 0}
+  .read:nth-child(3){border-left:none; padding-left:0}
+  .read.today{grid-column:1/-1; border-left:none; padding:14px 0 0; border-top:1px solid var(--line)}
+}
+@media (max-width:720px){
+  .deck-wrap{margin-top:-28px; background:linear-gradient(transparent 28px, var(--bg) 28px)}
+  .deck{padding:16px}
+  .deck-top{grid-template-columns:auto 1fr; gap:14px 14px}
+  .timeline{grid-column:1/-1}
+  .clock-time{font-size:26px}
+}
+
+/* ---------- proof band ---------- */
+.proof{border-block:1px solid var(--line); background:var(--bg)}
+.proof-in{display:grid; grid-template-columns:repeat(4,1fr); padding-block:30px}
+.proof-item{display:grid; gap:6px; padding-inline:24px; border-left:1px solid var(--line)}
+.proof-item:first-child{border-left:none; padding-left:0}
+.proof-v{font-family:var(--font-display); font-stretch:125%; font-weight:800; font-size:clamp(26px,2.6vw,38px); letter-spacing:-.02em; line-height:1}
+.proof-v span{color:var(--sun-text)}
+.proof-k{font-size:14px; color:var(--muted); line-height:1.4}
+@media (max-width:860px){ .proof-in{grid-template-columns:1fr 1fr; gap:24px 0} .proof-item:nth-child(3){border-left:none; padding-left:0} }
+
+/* ---------- shifts ---------- */
+.shifts{background:var(--bg-2)}
+.shift-pair{display:flex; gap:0; border-radius:var(--r-l); overflow:hidden; min-height:520px; box-shadow:var(--shadow)}
+.shift{position:relative; flex:1 1 0; min-width:0; padding:clamp(28px,3.4vw,48px); display:flex; flex-direction:column; gap:22px; overflow:hidden;
+  transition:flex-grow .7s var(--ease)}
+.shift-pair:hover .shift{flex-grow:.82} .shift-pair .shift:hover, .shift-pair .shift:focus-within{flex-grow:1.18}
+.shift-day{background:linear-gradient(160deg, var(--day-bg) 30%, var(--day-bg-2)); color:var(--day-ink)}
+.shift-night{background:linear-gradient(200deg, var(--night-bg-2), var(--night-bg) 60%); color:var(--night-ink)}
+.shift .label{color:inherit; opacity:.75; position:relative}
+.shift h3{font-stretch:125%; font-weight:800; font-size:clamp(28px,3vw,44px); line-height:.98; letter-spacing:-.02em; position:relative}
+.shift-big{display:flex; align-items:baseline; gap:10px; position:relative}
+.shift-big b{font-family:var(--font-mono); font-weight:500; font-size:clamp(44px,5vw,72px); letter-spacing:-.05em; line-height:1}
+.shift-big span{font-size:15px; opacity:.8}
+.shift-rows{list-style:none; padding:0; margin:auto 0 0; display:grid; gap:0; position:relative}
+.shift-rows li{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:12px 0; border-top:1px solid var(--day-line); font-size:15px}
+.shift-night .shift-rows li{border-top-color:var(--night-line)}
+.shift-rows li span{opacity:.82} .shift-rows li b{font-family:var(--font-mono); font-weight:500; white-space:nowrap}
+.shift-day .shift-rows li span{color:var(--day-muted); opacity:1}
+.shift-night .shift-rows li span{color:var(--night-muted); opacity:1}
+.shift-art{position:absolute; pointer-events:none}
+.shift-day .shift-art{right:-90px; top:-90px; width:340px; height:340px}
+.shift-night .shift-art{right:-30px; top:-30px; width:300px; height:300px}
+.shift-spark{position:relative; height:64px}
+.shift-spark svg{width:100%; height:100%; display:block}
+@media (max-width:860px){
+  .shift-pair{flex-direction:column; min-height:0}
+  .shift{flex:none}
+  .shift-day .shift-art{right:-120px; top:-120px; width:260px; height:260px; opacity:.85}
+  .shift-night .shift-art{right:-50px; top:-40px; width:190px; height:190px; opacity:.45}
+  .shift-pair:hover .shift, .shift-pair .shift:hover{flex-grow:0}
+}
+
+/* ---------- how it works ---------- */
+.how-grid{display:grid; grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr); gap:clamp(32px,5vw,80px); align-items:start}
+.how-stage-col{position:sticky; top:calc(var(--nav-h) + 24px)}
+.how-stage{position:relative; border-radius:var(--r-l); background:var(--surface); border:1px solid var(--line); overflow:hidden; aspect-ratio:5/4; max-width:100%}
+.how-stage svg{display:block; width:100%; height:100%}
+.stage-cap{position:absolute; left:16px; bottom:14px; right:16px; display:flex; justify-content:space-between; gap:12px; font-family:var(--font-mono); font-size:12px; color:var(--muted)}
+.stage-progress{position:absolute; top:0; left:0; height:3px; background:var(--sun); width:20%; transition:width .6s var(--ease)}
+.how-steps{list-style:none; margin:0; padding:0; display:grid}
+.step{min-height:68vh; display:flex; flex-direction:column; justify-content:center; gap:14px; padding-block:24px; opacity:.42; transition:opacity .5s}
+.step.active{opacity:1}
+.step-top{display:flex; align-items:center; gap:14px}
+.step-n{font-family:var(--font-mono); font-size:13px; font-weight:500; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; border:1.5px solid var(--line-2); flex:none}
+.step.active .step-n{background:var(--sun); color:var(--on-sun); border-color:var(--sun)}
+.step-when{font-family:var(--font-mono); font-size:13px; color:var(--muted)}
+.step p.body{color:var(--ink-2); max-width:46ch}
+.facts{display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 0; padding:0; list-style:none}
+.facts li{font-family:var(--font-mono); font-size:12.5px; padding:6px 10px; border-radius:6px; background:var(--surface); border:1px solid var(--line)}
+.how-stage .layer{opacity:0; transition:opacity .6s ease}
+.how-stage .layer.on{opacity:1}
+.iso-panel{transform:translateY(-70px); opacity:0; transition:transform .7s var(--ease), opacity .5s ease; transition-delay:calc(var(--i) * 55ms)}
+.how-stage .layer.on .iso-panel{transform:none; opacity:1}
+.iso-ghost{fill:none; stroke:var(--sun-text); stroke-width:1.5; stroke-dasharray:4 3}
+.iso-conduit{fill:none; stroke:var(--ink-2); stroke-width:3; stroke-dasharray:420; stroke-dashoffset:420; transition:stroke-dashoffset 1.4s var(--ease) .2s}
+.layer.on .iso-conduit{stroke-dashoffset:0}
+.iso-label{font-family:var(--font-mono); font-size:15px; fill:var(--ink)}
+.iso-label-k{font-family:var(--font-display); font-stretch:75%; font-weight:700; font-size:12px; letter-spacing:.14em; fill:var(--muted)}
+.iso-tag rect{fill:var(--surface); stroke:var(--line-2)}
+.iso-scan{animation:scan 2.8s ease-in-out infinite alternate}
+@keyframes scan{from{transform:translateX(0)}to{transform:translateX(340px)}}
+.iso-live-flow{fill:none; stroke:var(--sun); stroke-width:4; stroke-linecap:round; stroke-dasharray:1 12; animation:flow .9s linear infinite}
+@media (max-width:900px){
+  .how-grid{grid-template-columns:1fr; gap:0}
+  .how-stage-col{top:calc(var(--nav-h) + 8px); z-index:2; background:var(--bg); padding-bottom:10px}
+  .how-stage{aspect-ratio:16/11; max-height:44vh; margin-inline:auto}
+  .step{min-height:56vh}
+}
+
+/* ---------- hardware ---------- */
+.hardware{background:var(--bg)}
+.hw-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px}
+.hw{display:grid; grid-template-rows:auto 1fr; border-radius:var(--r-l); border:1px solid var(--line); background:var(--surface); overflow:hidden; min-width:0}
+.hw-visual{position:relative; height:340px; background:var(--surface-2); border-bottom:1px solid var(--line); display:grid; place-items:center; overflow:hidden}
+.hw-body{padding:clamp(24px,2.6vw,36px); display:grid; gap:14px; align-content:start}
+.hw-body p{color:var(--ink-2)}
+.specs{display:grid; grid-template-columns:1fr 1fr; gap:0; margin:8px 0 0}
+.specs div{padding:12px 0; border-top:1px solid var(--line); display:grid; gap:2px}
+.specs div:nth-child(odd){padding-right:16px}
+.specs dt{font-size:13px; color:var(--muted)}
+.specs dd{margin:0; font-family:var(--font-mono); font-size:17px; font-weight:500; font-variant-numeric:tabular-nums}
+/* vault render */
+.vault3d{position:relative; display:flex; gap:14px; align-items:flex-end}
+.vault-unit{position:relative; width:118px; height:250px; border-radius:16px; background:linear-gradient(100deg, var(--vault-edge), var(--vault-body) 18%, var(--vault-body) 82%, var(--vault-edge));
+  box-shadow:0 30px 40px -24px #0000005C, inset 0 1px 0 #FFFFFF40; border:1px solid var(--line)}
+.vault-unit::after{content:""; position:absolute; left:50%; bottom:-18px; width:150%; height:22px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(#0000002E, transparent 70%)}
+.vault-unit.small{height:250px; opacity:.92}
+.vault-led{position:absolute; left:50%; top:34px; bottom:34px; width:8px; margin-left:-4px; border-radius:4px; background:var(--line); overflow:hidden}
+.vault-led i{position:absolute; left:0; right:0; bottom:0; height:var(--soc,80%); background:var(--charge-fill); box-shadow:0 0 14px var(--charge-fill); border-radius:4px; transition:height .5s ease}
+.vault-logo{position:absolute; left:50%; bottom:14px; transform:translateX(-50%); width:18px; height:18px}
+.vault-soc{position:absolute; top:22px; right:-12px; transform:translateX(100%); font-family:var(--font-mono); font-size:13px; white-space:nowrap; color:var(--muted)}
+.vault-soc b{display:block; font-size:24px; color:var(--ink); font-weight:500}
+.panel3d{width:250px; height:300px; transform:perspective(900px) rotateX(48deg) rotateZ(-28deg); transform-style:preserve-3d; filter:drop-shadow(0 40px 30px #00000040)}
+.panel3d svg{width:100%; height:100%}
+@media (max-width:900px){ .hw-grid{grid-template-columns:1fr} .hw-visual{height:300px} }
+
+/* ---------- plans ---------- */
+.plans{background:var(--bg-2)}
+.plans-top{display:flex; justify-content:space-between; align-items:end; gap:24px; flex-wrap:wrap; margin-bottom:clamp(32px,4vw,56px)}
+.plans-top .sec-head{margin-bottom:0}
+.seg{display:inline-flex; padding:4px; border-radius:10px; background:var(--surface); border:1px solid var(--line); gap:2px}
+.seg input{position:absolute; opacity:0; pointer-events:none}
+.seg label{padding:9px 16px; border-radius:7px; font-size:14px; font-weight:600; cursor:pointer; color:var(--muted); transition:background-color .2s, color .2s; white-space:nowrap}
+.seg input:checked + label{background:var(--ink); color:var(--bg)}
+.seg input:focus-visible + label{outline:2px solid var(--focus); outline-offset:2px}
+.plan-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; align-items:stretch}
+.plan{position:relative; display:flex; flex-direction:column; gap:20px; padding:28px; border-radius:var(--r-l); background:var(--surface); border:1px solid var(--line); min-width:0}
+.plan.pick{border:2px solid var(--sun); box-shadow:0 30px 60px -40px #FFB21A99}
+.plan-flag{position:absolute; top:-13px; left:26px; background:var(--sun); color:var(--on-sun); font-family:var(--font-display); font-stretch:80%; font-weight:750; font-size:12px; letter-spacing:.1em; text-transform:uppercase; padding:5px 10px; border-radius:5px}
+.plan h3{font-stretch:125%; font-weight:800; font-size:28px; letter-spacing:-.01em}
+.plan-for{color:var(--muted); font-size:15px; margin-top:4px}
+.plan-viz{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; padding:16px; border-radius:var(--r-m); background:var(--surface-2); border:1px solid var(--line); min-height:124px}
+.pv-panels{display:grid; grid-template-columns:repeat(8, 14px); gap:3px; align-content:end}
+.pv-panels i{display:block; width:14px; height:20px; border-radius:2px; background:color-mix(in srgb, var(--grid) 55%, var(--panel)); box-shadow:inset 0 0 0 1px var(--panel-line)}
+.pv-vaults{display:flex; gap:5px; align-items:flex-end}
+.pv-vaults i{display:block; width:16px; height:44px; border-radius:4px; background:var(--vault-body); border:1px solid var(--vault-edge); position:relative}
+.pv-vaults i::after{content:""; position:absolute; left:6px; width:2px; top:8px; bottom:8px; background:var(--charge-fill); border-radius:2px}
+.pv-vaults .none{font-size:12px; color:var(--muted); font-family:var(--font-mono); width:auto; height:auto; border:1px dashed var(--line-2); background:none; padding:4px 6px}
+.pv-vaults .none::after{display:none}
+.plan-price{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
+.plan-price b{font-family:var(--font-mono); font-size:36px; font-weight:500; letter-spacing:-.04em}
+.plan-price span{color:var(--muted); font-size:14px}
+.plan ul{list-style:none; padding:0; margin:0; display:grid; gap:0}
+.plan li{display:flex; gap:10px; padding:10px 0; border-top:1px solid var(--line); font-size:15px}
+.plan li svg{width:18px; height:18px; flex:none; margin-top:2px; color:var(--charge)}
+.plan .btn{margin-top:auto}
+.fine{font-size:13px; color:var(--muted); margin-top:20px; max-width:90ch}
+@media (max-width:960px){ .plan-grid{grid-template-columns:1fr; max-width:560px} }
+
+/* ---------- calculator ---------- */
+.calc-grid{display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:24px; align-items:start}
+.calc-in, .calc-out{border-radius:var(--r-l); background:var(--surface); border:1px solid var(--line); padding:clamp(22px,2.6vw,34px); min-width:0}
+.calc-in{display:grid; gap:24px}
+.field{display:grid; gap:10px; border:0; margin:0; padding:0; min-width:0}
+.field legend, .field > label{font-weight:600; font-size:15px; padding:0}
+.field-row{display:flex; justify-content:space-between; align-items:baseline; gap:12px}
+.field-row output{font-family:var(--font-mono); font-size:22px; font-weight:500}
+.select{appearance:none; -webkit-appearance:none; width:100%; height:50px; border-radius:8px; border:1.5px solid var(--line-2); background:var(--surface-2); padding:0 44px 0 14px; font-size:16px; cursor:pointer;
+  background-image:linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position:calc(100% - 22px) 22px, calc(100% - 16px) 22px; background-size:6px 6px; background-repeat:no-repeat}
+.range{-webkit-appearance:none; appearance:none; width:100%; height:28px; background:transparent; cursor:pointer; margin:0}
+.range::-webkit-slider-runnable-track{height:6px; border-radius:3px; background:linear-gradient(to right, var(--sun) var(--p,40%), var(--bg-2) var(--p,40%))}
+.range::-moz-range-track{height:6px; border-radius:3px; background:var(--bg-2)}
+.range::-moz-range-progress{height:6px; border-radius:3px; background:var(--sun)}
+.range::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--surface); border:3px solid var(--ink); margin-top:-9px}
+.range::-moz-range-thumb{width:20px; height:20px; border-radius:50%; background:var(--surface); border:3px solid var(--ink)}
+.range-scale{display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--muted)}
+.opts{display:grid; grid-template-columns:repeat(4,1fr); gap:6px}
+.opts.three{grid-template-columns:repeat(3,1fr)}
+.opts input{position:absolute; opacity:0; pointer-events:none}
+.opts label{display:grid; place-items:center; gap:2px; text-align:center; padding:10px 6px; border-radius:8px; border:1.5px solid var(--line-2); cursor:pointer; font-size:14px; font-weight:600; transition:all .2s; min-width:0}
+.opts label small{font-weight:400; font-size:11.5px; color:var(--muted); font-family:var(--font-mono)}
+.opts input:checked + label{border-color:var(--ink); background:var(--ink); color:var(--bg)}
+.opts input:checked + label small{color:var(--bg); opacity:.75}
+.opts input:focus-visible + label{outline:2px solid var(--focus); outline-offset:2px}
+.calc-out{display:grid; gap:22px}
+.res-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; border:1px solid var(--line); border-radius:var(--r-m); overflow:hidden}
+.res{padding:16px 18px; border-left:1px solid var(--line); border-top:1px solid var(--line); display:grid; gap:4px; min-width:0}
+.res:nth-child(3n+1){border-left:none} .res:nth-child(-n+3){border-top:none}
+.res-v{font-family:var(--font-mono); font-size:clamp(20px,2vw,26px); font-weight:500; letter-spacing:-.03em; line-height:1.15; white-space:nowrap}
+.res-s{font-size:12.5px; color:var(--muted)}
+.res.hl{background:#FFB21A1F}
+.res.hl .res-v{color:var(--sun-text)}
+.chart-box{display:grid; gap:10px}
+.chart-head{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:baseline}
+.chart-legend{display:flex; gap:16px; font-size:13px; color:var(--muted); flex-wrap:wrap}
+.chart-legend i{display:inline-block; width:16px; height:3px; border-radius:2px; vertical-align:middle; margin-right:6px}
+.chart-wrap{overflow-x:auto}
+#payChart{width:100%; height:auto; display:block}
+#payChart .ax{font-family:var(--font-mono); font-size:11px; fill:var(--muted)}
+#payChart .gl{stroke:var(--line); stroke-width:1}
+#payChart .l-util{fill:none; stroke:var(--grid); stroke-width:2.5}
+#payChart .l-sol{fill:none; stroke:var(--sun-text); stroke-width:3}
+#payChart .a-sol{fill:var(--sun); opacity:.16}
+#payChart .be-line{stroke:var(--ink); stroke-width:1; stroke-dasharray:3 3}
+#payChart .be-dot{fill:var(--sun); stroke:var(--ink); stroke-width:2}
+#payChart .be-t{font-family:var(--font-mono); font-size:12px; fill:var(--ink)}
+#payChart .be-bg{fill:var(--surface); stroke:var(--line-2)}
+@media (max-width:960px){ .calc-grid{grid-template-columns:1fr} }
+@media (max-width:560px){ .res-grid{grid-template-columns:1fr 1fr} .res:nth-child(3n+1){border-left:1px solid var(--line)} .res:nth-child(2n+1){border-left:none} .res:nth-child(3){border-top:1px solid var(--line)} }
+
+/* ---------- texas ---------- */
+.texas{background:var(--bg-2)}
+.tx-grid{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(32px,5vw,72px); align-items:center}
+.tx-map{position:relative}
+.tx-map svg{width:100%; height:auto; display:block}
+.tx-shape{stroke:var(--ink); stroke-width:1.5; stroke-linejoin:round}
+.tx-city{cursor:pointer}
+.tx-city circle.dot{fill:var(--ink); stroke:var(--bg-2); stroke-width:2; transition:r .2s}
+.tx-city circle.halo{fill:var(--sun); opacity:.28; transition:opacity .2s}
+.tx-city text{font-family:var(--font-display); font-stretch:80%; font-weight:650; font-size:13px; fill:var(--ink); letter-spacing:.02em; paint-order:stroke; stroke:var(--bg-2); stroke-width:4px; stroke-linejoin:round}
+.tx-city.on circle.halo{opacity:.7}
+.tx-city:focus-visible{outline:none} .tx-city:focus-visible circle.dot{stroke:var(--focus); stroke-width:3}
+.tx-card{position:relative; margin-top:18px; width:100%; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); box-shadow:var(--shadow); padding:16px 18px; display:grid; gap:8px}
+.tx-card h4{font-stretch:110%; font-weight:750; font-size:19px}
+.tx-card dl{margin:0; display:grid; grid-template-columns:1fr 1fr; column-gap:28px}
+.tx-card dl div{display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-top:1px solid var(--line); font-size:13.5px}
+.tx-card dt{color:var(--muted)} .tx-card dd{margin:0; font-family:var(--font-mono); text-align:right}
+.tx-legend{display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:11.5px; color:var(--muted); margin-top:10px}
+.tx-legend i{width:120px; height:8px; border-radius:4px; background:linear-gradient(90deg, #FFB21A, #FFB21A33)}
+.tx-facts{display:grid; gap:0}
+.tx-fact{display:grid; grid-template-columns:44px 1fr; gap:16px; padding:20px 0; border-top:1px solid var(--line)}
+.tx-fact svg{width:30px; height:30px; color:var(--sun-text)}
+.tx-fact h3{font-size:18px; font-stretch:105%; font-weight:700; margin-bottom:4px}
+.tx-fact p{color:var(--ink-2); font-size:15px}
+@media (max-width:560px){ .tx-city text{font-size:21px} .tx-city circle.dot{r:7} }
+@media (max-width:960px){ .tx-grid{grid-template-columns:1fr} }
+@media (max-width:480px){ .tx-card dl{grid-template-columns:1fr} }
+
+/* ---------- app ---------- */
+.app-grid{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:clamp(40px,6vw,96px); align-items:center}
+.app-list{list-style:none; padding:0; margin:28px 0 0; display:grid; gap:0; max-width:560px}
+.app-list li{display:grid; grid-template-columns:28px 1fr; gap:14px; padding:16px 0; border-top:1px solid var(--line)}
+.app-list svg{width:22px; height:22px; color:var(--sun-text); margin-top:2px}
+.app-list b{display:block; font-weight:650}
+.app-list span{color:var(--ink-2); font-size:15px}
+.phone{width:300px; max-width:100%; aspect-ratio:300/610; border-radius:46px; padding:12px; background:#0B0E13; box-shadow:0 0 0 1.5px #2A303A, 0 50px 80px -40px #000000A6; position:relative}
+.phone-screen{position:relative; width:100%; height:100%; border-radius:36px; overflow:hidden; background:var(--bg); display:flex; flex-direction:column; padding:44px 18px 18px; gap:12px}
+.phone-notch{position:absolute; top:10px; left:50%; width:96px; height:28px; margin-left:-48px; border-radius:20px; background:#0B0E13; z-index:2}
+.ph-top{display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted); font-family:var(--font-mono)}
+.ph-greet{font-family:var(--font-display); font-stretch:115%; font-weight:780; font-size:21px; line-height:1.1}
+.ph-ring{position:relative; width:150px; height:150px; margin:4px auto 0}
+.ph-ring svg{width:100%; height:100%; transform:rotate(-90deg)}
+.ph-ring .bg{fill:none; stroke:var(--bg-2); stroke-width:12}
+.ph-ring .fg{fill:none; stroke:var(--charge-fill); stroke-width:12; stroke-linecap:round; transition:stroke-dashoffset .5s}
+.ph-ring-c{position:absolute; inset:0; display:grid; place-content:center; text-align:center}
+.ph-ring-c b{font-family:var(--font-mono); font-size:30px; font-weight:500; letter-spacing:-.04em; line-height:1}
+.ph-ring-c span{font-size:11px; color:var(--muted); margin-top:4px}
+.ph-tiles{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.ph-tile{border-radius:14px; background:var(--surface); border:1px solid var(--line); padding:10px 12px; display:grid; gap:2px}
+.ph-tile .label{font-size:10px}
+.ph-tile b{font-family:var(--font-mono); font-weight:500; font-size:17px}
+.ph-alert{margin-top:auto; border-radius:14px; padding:10px 12px; background:#FFB21A24; border:1px solid #FFB21A66; font-size:12px; line-height:1.4; display:flex; gap:10px; align-items:flex-start}
+.ph-alert svg{width:16px; height:16px; flex:none; color:var(--sun-text); margin-top:1px}
+@media (max-width:860px){ .app-grid{grid-template-columns:1fr} .phone{margin-inline:auto} }
+
+/* ---------- faq ---------- */
+.faq-grid{display:grid; grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr); gap:clamp(32px,5vw,80px)}
+.faq-list{display:grid; border-top:1px solid var(--line)}
+.faq-list details{border-bottom:1px solid var(--line)}
+.faq-list summary{list-style:none; cursor:pointer; padding:22px 44px 22px 0; position:relative; font-family:var(--font-display); font-stretch:105%; font-weight:650; font-size:18px}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:""; position:absolute; right:6px; top:50%; width:14px; height:14px; margin-top:-7px;
+  background:linear-gradient(var(--ink),var(--ink)) center/14px 2px no-repeat, linear-gradient(var(--ink),var(--ink)) center/2px 14px no-repeat; transition:transform .3s var(--ease)}
+.faq-list details[open] summary::after{transform:rotate(45deg)}
+.faq-list details p{padding:0 0 22px; color:var(--ink-2); max-width:64ch}
+@media (max-width:860px){ .faq-grid{grid-template-columns:1fr} }
+
+/* ---------- quote ---------- */
+.quote{background:var(--sun); color:var(--on-sun); position:relative; overflow:hidden}
+.quote::before{content:""; position:absolute; right:-12%; bottom:-70%; width:min(900px,90vw); aspect-ratio:1; border-radius:50%;
+  background:repeating-linear-gradient(180deg, #FFFFFF33 0 30px, transparent 30px 42px); pointer-events:none}
+.quote-grid{position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(32px,5vw,80px); align-items:center}
+.quote .eyebrow{color:var(--on-sun)} .quote .eyebrow::before{background:var(--on-sun)}
+.quote .lede{color:var(--on-sun); opacity:.86}
+.quote-steps{list-style:none; padding:0; margin:28px 0 0; display:grid; gap:10px; font-size:15px}
+.quote-steps li{display:flex; gap:12px; align-items:center}
+.quote-steps b{font-family:var(--font-mono); font-weight:500; width:28px; height:28px; border-radius:50%; border:1.5px solid #1A130066; display:grid; place-items:center; font-size:12px; flex:none}
+.qform{background:#FFFFFF; color:#11150F; border-radius:var(--r-l); padding:clamp(22px,3vw,36px); display:grid; gap:16px; box-shadow:0 40px 80px -40px #1A130080}
+.qform .f{display:grid; gap:6px}
+.qform label{font-size:14px; font-weight:600}
+.qform input{height:50px; border-radius:8px; border:1.5px solid #11150F33; background:#F8F9F4; padding:0 14px; font-size:16px; color:#11150F; width:100%; min-width:0}
+.qform input:focus-visible{outline:2px solid #11150F; outline-offset:1px; border-color:#11150F}
+.qform .two{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.qform .hint{font-size:12.5px; color:#5F675B}
+.qform .err{font-size:13px; color:#B4321F; min-height:0}
+.qform .btn-ink{background:#11150F; color:#FFF3CF; height:54px}
+.qform .btn-ink:hover{background:#2A3127}
+.qdone{display:grid; gap:10px; text-align:left}
+.qdone h3{font-stretch:115%; font-weight:780; font-size:26px}
+.qdone p{color:#384035}
+@media (max-width:900px){ .quote-grid{grid-template-columns:1fr} }
+@media (max-width:480px){ .qform .two{grid-template-columns:1fr} }
+
+/* ---------- footer ---------- */
+.foot{background:var(--bg); border-top:1px solid var(--line); padding-block:56px 40px}
+.foot-grid{display:grid; grid-template-columns:1.4fr repeat(3,1fr); gap:32px}
+.foot h4{font-family:var(--font-display); font-stretch:75%; font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:14px}
+.foot ul{list-style:none; padding:0; margin:0; display:grid; gap:10px}
+.foot a{text-decoration:none; color:var(--ink-2); font-size:15px} .foot a:hover{color:var(--ink)}
+.foot-note{margin-top:48px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--muted)}
+.foot-blurb{color:var(--muted); font-size:15px; margin-top:16px; max-width:34ch}
+@media (max-width:860px){ .foot-grid{grid-template-columns:1fr 1fr} .foot-grid > :first-child{grid-column:1/-1} }
+
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .flow .dash,.mill-wheel,.cloud,.twinkle,.glint,.iso-scan,.iso-live-flow,.live-dot{animation:none!important}
+  .flow .dash{stroke-dasharray:none; stroke-width:3}
+  .iso-panel{transition:none}
+}
+
+</style>
+</head>
+<body>
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Solstead Energy, home">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <defs>
+          <mask id="mkCutA"><rect width="48" height="48" fill="#fff"/><rect x="8" y="31" width="32" height="2.2" fill="#000"/><rect x="8" y="35.6" width="32" height="2.2" fill="#000"/></mask>
+          <clipPath id="mkClipA"><rect width="48" height="41"/></clipPath>
+        </defs>
+        <g clip-path="url(#mkClipA)"><g class="mark-disc"><path class="mark-sun" d="M12 41a12 12 0 0 1 24 0z" mask="url(#mkCutA)"/></g></g>
+        <path class="mark-ink" d="M5.5 24.5 24 10l18.5 14.5" stroke-width="5" stroke-linejoin="miter" stroke-linecap="square"/>
+        <rect class="mark-ground" x="4" y="41" width="40" height="3.2" rx="1"/>
+        <path class="mark-star" d="M39 3.5l1.2 3.3 3.3 1.2-3.3 1.2L39 12.5l-1.2-3.3L34.5 8l3.3-1.2z"/>
+      </svg>
+      <span class="brand-word"><span class="brand-name">SOLSTEAD</span><span class="brand-sub">ENERGY · TEXAS</span></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#shifts">Day &amp; night</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#hardware">Hardware</a></li>
+      <li><a href="#plans">Plans</a></li>
+      <li><a href="#savings">Savings</a></li>
+      <li><a href="#texas">Texas</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="dn" id="dnToggle" role="switch" aria-checked="false" aria-label="Night mode">
+        <svg class="dn-ico sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="dn-ico moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7z"/></svg>
+        <span class="dn-knob"></span>
+      </button>
+      <a class="btn btn-sun btn-sm nav-quote" href="#quote">Get a quote</a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="top" data-phase="day">
+  <div class="hero-stage">
+    <svg class="scene" id="scene" viewBox="0 0 1600 800" preserveAspectRatio="xMaxYMax slice" role="img" aria-labelledby="sceneT">
+      <title id="sceneT">A Texas ranch house with 22 rooftop solar panels and two Vault batteries. The sky, sun and energy flows follow the simulated time of day.</title>
+      <defs>
+        <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+          <stop id="sk0" offset="0" stop-color="#66A6E2"/><stop id="sk1" offset=".58" stop-color="#9CCBEE"/><stop id="sk2" offset="1" stop-color="#DCEDF5"/>
+        </linearGradient>
+        <radialGradient id="sunGlow"><stop offset="0" stop-color="#FFF1C4" stop-opacity=".95"/><stop offset=".3" stop-color="#FFD27A" stop-opacity=".4"/><stop offset="1" stop-color="#FFD27A" stop-opacity="0"/></radialGradient>
+        <radialGradient id="moonGlow"><stop offset="0" stop-color="#DCE6F5" stop-opacity=".42"/><stop offset="1" stop-color="#DCE6F5" stop-opacity="0"/></radialGradient>
+        <radialGradient id="warm"><stop offset="0" stop-color="#FFC46B" stop-opacity=".85"/><stop offset="1" stop-color="#FFC46B" stop-opacity="0"/></radialGradient>
+        <radialGradient id="tealGlow"><stop offset="0" stop-color="#46DDB3" stop-opacity=".9"/><stop offset="1" stop-color="#46DDB3" stop-opacity="0"/></radialGradient>
+        <pattern id="cells" width="9.6" height="11.5" patternUnits="userSpaceOnUse"><path d="M9.6 0V11.5M0 11.5H9.6" fill="none" stroke="#FFFFFF" stroke-opacity=".16" stroke-width="1"/></pattern>
+        <linearGradient id="glintG" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <clipPath id="panelClip"><rect x="866" y="381" width="348" height="98"/></clipPath>
+        <filter id="blur10" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="10"/></filter>
+      </defs>
+      <rect width="1600" height="800" fill="url(#skyG)"/>
+      <g id="stars"></g>
+      <g id="moonG" transform="translate(-200 -200)"><circle r="120" fill="url(#moonGlow)"/><circle r="25" fill="#E8EDF5"/><circle cx="-8" cy="-6" r="5.5" fill="#CBD4E2"/><circle cx="8" cy="7" r="3.8" fill="#CBD4E2"/><circle cx="5" cy="-11" r="2.6" fill="#CBD4E2"/></g>
+      <g id="sunG" transform="translate(800 200)"><circle id="sunHalo" r="170" fill="url(#sunGlow)"/><circle id="sunDisc" r="38" fill="#FFE08A"/></g>
+      <g id="clouds">
+        <g class="cloud" style="--cd:170s;--cdl:-40s"><g transform="translate(0 150)"><ellipse class="m-cloud" cx="0" cy="0" rx="70" ry="22"/><ellipse class="m-cloud" cx="-30" cy="-12" rx="34" ry="24"/><ellipse class="m-cloud" cx="18" cy="-18" rx="40" ry="30"/></g></g>
+        <g class="cloud" style="--cd:220s;--cdl:-150s"><g transform="translate(0 92) scale(.7)"><ellipse class="m-cloud" cx="0" cy="0" rx="70" ry="22"/><ellipse class="m-cloud" cx="-26" cy="-14" rx="36" ry="24"/><ellipse class="m-cloud" cx="22" cy="-16" rx="38" ry="28"/></g></g>
+        <g class="cloud" style="--cd:260s;--cdl:-90s"><g transform="translate(0 250) scale(.55)"><ellipse class="m-cloud" cx="0" cy="0" rx="80" ry="22"/><ellipse class="m-cloud" cx="-20" cy="-14" rx="40" ry="24"/><ellipse class="m-cloud" cx="30" cy="-12" rx="34" ry="22"/></g></g>
+      </g>
+      <path class="m-hillFar" d="M0 548C120 528 250 520 380 534C520 549 640 520 780 528C930 537 1060 512 1200 522C1340 532 1460 512 1600 520V800H0Z"/>
+      <path class="m-hillNear" d="M0 598C160 580 320 586 470 596C640 607 780 586 940 590C1120 595 1260 582 1420 590C1500 594 1560 590 1600 588V800H0Z"/>
+      <!-- windmill -->
+      <g id="mill" class="m-millS" stroke-width="3" fill="none">
+        <path d="M368 642 377 528M392 642 383 528M371 610H389M373 580H387M375 552H385M371 610 387 580M389 610 373 580M373 580 385 552M387 580 375 552"/>
+        <rect class="m-mill" x="372" y="524" width="16" height="5" stroke="none"/>
+        <path class="m-mill" d="M383 514 422 507 424 521 383 518Z" stroke="none"/>
+        <g class="mill-wheel" id="millWheel"></g>
+      </g>
+      <path class="m-ground" d="M0 642C400 634 1200 634 1600 642V800H0Z"/>
+      <path class="m-ground2" d="M0 712C500 704 1100 704 1600 712V800H0Z"/>
+      <path class="m-drive" d="M1314 650H1466L1590 800H1220Z"/>
+      <path class="m-drive" d="M1022 650H1062L1080 800H1000Z"/>
+      <g id="fence"></g>
+      <!-- live oak -->
+      <g id="oak">
+        <path class="m-trunk" d="M552 643C555 622 551 606 541 594L549 590C558 601 561 610 563 598C566 588 575 582 586 578L589 585C575 592 570 606 571 643Z"/>
+        <circle class="m-canopy" cx="520" cy="586" r="26"/><circle class="m-canopy" cx="552" cy="566" r="36"/><circle class="m-canopy" cx="594" cy="574" r="30"/>
+        <circle class="m-canopy" cx="626" cy="590" r="22"/><circle class="m-canopy" cx="498" cy="604" r="18"/><circle class="m-canopy" cx="574" cy="596" r="26"/>
+        <circle class="m-canopy2" cx="545" cy="556" r="16"/><circle class="m-canopy2" cx="590" cy="566" r="13"/><circle class="m-canopy2" cx="520" cy="580" r="10"/>
+      </g>
+      <!-- vaults -->
+      <path class="m-trimS" d="M777 502V546H715V566" fill="none" stroke-width="4"/>
+      <g id="vaults">
+        <rect class="m-vault m-vaultEdgeS" x="681" y="566" width="32" height="77" rx="6" stroke-width="1.5"/>
+        <rect class="m-vault m-vaultEdgeS" x="719" y="566" width="32" height="77" rx="6" stroke-width="1.5"/>
+        <rect x="695" y="578" width="4" height="52" rx="2" fill="#0000001F"/><rect x="733" y="578" width="4" height="52" rx="2" fill="#0000001F"/>
+        <rect id="led1" x="695" y="590" width="4" height="40" rx="2" fill="#2FC79C"/><rect id="led2" x="733" y="590" width="4" height="40" rx="2" fill="#2FC79C"/>
+      </g>
+      <!-- main house -->
+      <rect class="m-wall" x="780" y="490" width="520" height="160"/>
+      <rect class="m-wallShade" x="780" y="490" width="520" height="18"/>
+      <rect class="m-stone" x="780" y="612" width="520" height="38"/>
+      <path class="m-stoneLineS" fill="none" stroke-width="1.5" d="M780 625H1300M780 638H1300M820 612V625M880 612V625M960 612V625M1120 612V625M1190 612V625M1260 612V625M850 625V638M930 625V638M1150 625V638M1230 625V638M800 638V650M900 638V650M1140 638V650M1210 638V650M1280 638V650"/>
+      <g id="windows">
+        <rect class="m-shutter" x="794" y="520" width="12" height="78"/><rect class="m-shutter" x="926" y="520" width="12" height="78"/>
+        <rect class="m-shutter" x="1142" y="520" width="12" height="78"/><rect class="m-shutter" x="1274" y="520" width="12" height="78"/>
+        <rect class="m-trim" x="810" y="518" width="112" height="82"/><rect class="m-glass" x="815" y="523" width="102" height="72"/>
+        <rect class="m-trim" x="1158" y="518" width="112" height="82"/><rect class="m-glass" x="1163" y="523" width="102" height="72"/>
+      </g>
+      <g id="winGlow" opacity="0">
+        <rect x="815" y="523" width="102" height="72" fill="#FFC870"/><rect x="1163" y="523" width="102" height="72" fill="#FFC870"/>
+        <rect x="1030" y="540" width="24" height="26" fill="#FFC870"/>
+        <ellipse cx="866" cy="560" rx="90" ry="60" fill="#FFB54D" opacity=".35" filter="url(#blur10)"/><ellipse cx="1214" cy="560" rx="90" ry="60" fill="#FFB54D" opacity=".35" filter="url(#blur10)"/>
+        <circle cx="1094" cy="552" r="46" fill="url(#warm)"/>
+        <ellipse cx="1042" cy="664" rx="110" ry="16" fill="url(#warm)" opacity=".55"/>
+      </g>
+      <path class="m-trimS" fill="none" stroke-width="4" d="M866 523V595M815 559H917M1214 523V595M1163 559H1265"/>
+      <rect class="m-trim" x="1004" y="524" width="76" height="126"/>
+      <rect class="m-door" x="1010" y="530" width="64" height="120"/>
+      <rect class="m-glass" x="1030" y="540" width="24" height="26" id="doorGlass"/>
+      <circle class="m-trim" cx="1064" cy="596" r="3.5"/>
+      <rect class="m-trim" x="1089" y="544" width="10" height="16" rx="2"/>
+      <!-- roof -->
+      <polygon class="m-roof" points="748,496 1332,496 1238,372 842,372"/>
+      <polygon class="m-roofLight" points="842,372 748,496 806,496"/>
+      <polygon class="m-roofShade" points="1238,372 1332,496 1274,496"/>
+      <path class="m-roofShadeS" d="M842 372H1238" stroke-width="5"/>
+      <rect class="m-trim" x="742" y="494" width="596" height="10"/>
+      <g id="panels"></g>
+      <g clip-path="url(#panelClip)"><rect id="glint" class="glint" x="760" y="370" width="110" height="120" fill="url(#glintG)" transform="skewX(-20)" opacity=".5"/></g>
+      <!-- garage -->
+      <rect class="m-wall" x="1290" y="528" width="200" height="122"/>
+      <polygon class="m-roof" points="1272,536 1508,536 1390,446"/>
+      <path class="m-trimS" fill="none" stroke-width="8" stroke-linejoin="miter" d="M1268 539 1390 443 1512 539"/>
+      <polygon class="m-wallShade" points="1378,500 1402,500 1390,488"/>
+      <rect class="m-garageDoor" x="1314" y="566" width="152" height="84"/>
+      <path class="m-garageLineS" fill="none" stroke-width="2" d="M1314 587H1466M1314 608H1466M1314 629H1466"/>
+      <rect class="m-pole" x="1436" y="430" width="5" height="64"/>
+      <!-- utility pole -->
+      <rect class="m-pole" x="1556" y="318" width="10" height="334"/>
+      <rect class="m-pole" x="1520" y="334" width="80" height="7"/>
+      <rect class="m-pole" x="1566" y="382" width="22" height="34" rx="4"/>
+      <path class="m-wireS" fill="none" stroke-width="2" d="M1528 334Q1486 396 1438 432M1594 334Q1640 352 1700 344"/>
+      <!-- shrubs -->
+      <g id="shrubs">
+        <ellipse class="m-shrub" cx="806" cy="646" rx="30" ry="15"/><ellipse class="m-shrub" cx="856" cy="648" rx="24" ry="12"/><ellipse class="m-shrub" cx="960" cy="648" rx="26" ry="12"/>
+        <ellipse class="m-shrub" cx="1120" cy="646" rx="30" ry="15"/><ellipse class="m-shrub" cx="1176" cy="648" rx="24" ry="12"/><ellipse class="m-shrub" cx="1250" cy="646" rx="30" ry="14"/>
+      </g>
+      <g id="vaultGlow" opacity="0"><circle cx="697" cy="604" r="26" fill="url(#tealGlow)"/><circle cx="735" cy="604" r="26" fill="url(#tealGlow)"/></g>
+      <!-- energy flows -->
+      <g id="flows">
+        <g class="flow solar" id="fSH"><path class="base" d="M1040 472V528"/><path class="dash" d="M1040 472V528"/></g>
+        <g class="flow solar" id="fSV"><path class="base" d="M866 466 777 504V546H715V566"/><path class="dash" d="M866 466 777 504V546H715V566"/></g>
+        <g class="flow vault" id="fVH"><path class="base" d="M752 606H1004"/><path class="dash" d="M752 606H1004"/></g>
+        <g class="flow grid" id="fG"><path class="base" d="M1528 336Q1486 398 1438 434V556H1080"/><path class="dash" d="M1528 336Q1486 398 1438 434V556H1080"/></g>
+      </g>
+      <g id="chips">
+        <g class="chip" id="cSolar" transform="translate(1040 328)"><rect x="-86" y="-23" width="172" height="46" rx="9"/><text class="k" x="-70" y="5">SOLAR</text><text x="70" y="6" text-anchor="end" id="cSolarV">6.8 kW</text></g>
+        <g class="chip" id="cVault" transform="translate(716 668)"><rect x="-86" y="-23" width="172" height="46" rx="9"/><text class="k" x="-70" y="5">VAULTS</text><text x="70" y="6" text-anchor="end" id="cVaultV">84%</text></g>
+        <g class="chip" id="cHome" transform="translate(1042 668)"><rect x="-86" y="-23" width="172" height="46" rx="9"/><text class="k" x="-70" y="5">HOME</text><text x="70" y="6" text-anchor="end" id="cHomeV">2.9 kW</text></g>
+        <g class="chip" id="cGrid" transform="translate(1452 290)"><rect x="-86" y="-23" width="172" height="46" rx="9"/><text class="k" x="-70" y="5">GRID</text><text x="70" y="6" text-anchor="end" id="cGridV">0.0 kW</text></g>
+      </g>
+    </svg>
+
+    <div class="hero-copy">
+      <div class="wrap">
+        <div class="hero-text">
+          <p class="live-line"><span class="live-dot" aria-hidden="true"></span><span id="liveText">Live demo home · Round Rock, TX · 1:30 PM · 97°F</span></p>
+          <h1 class="hero-h1 h-xl"><span class="l-day">Sun by day.</span><span class="l-night">Vault by night.</span></h1>
+          <p class="hero-lede">Solar panels and home power stations built for Texas roofs, Texas heat and the Texas grid. Our own crews install them, usually within five weeks of your first call.</p>
+          <div class="hero-cta">
+            <a class="btn btn-sun" href="#quote">Get my roof plan <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <button class="btn btn-ghost" id="heroPlay" type="button"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Play a Texas day</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck-wrap">
+    <div class="wrap">
+      <div class="deck" id="deck" aria-label="Energy simulator">
+        <div class="deck-top">
+          <button class="play" id="play" type="button" aria-pressed="false" aria-label="Play a simulated day">
+            <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1"/><rect x="13.8" y="5" width="4.2" height="14" rx="1"/></svg>
+          </button>
+          <div class="clock"><div class="clock-time" id="clockTime" aria-live="off">1:30 PM</div><div class="clock-sub"><span id="clockPhase">Peak sun</span> · Sat, Jul 19</div></div>
+          <div class="timeline">
+            <div class="tl-chart">
+              <svg viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
+                <rect class="tl-night" id="tlN1" x="0" y="0" width="403" height="100"/><rect class="tl-night" id="tlN2" x="1233" y="0" width="207" height="100"/>
+                <path class="tl-solar" id="tlSolar"/><path class="tl-solar-l" id="tlSolarL" vector-effect="non-scaling-stroke"/>
+                <path class="tl-load" id="tlLoad" vector-effect="non-scaling-stroke"/>
+                <path class="tl-soc" id="tlSoc" vector-effect="non-scaling-stroke"/>
+              </svg>
+              <div class="tl-cursor" id="tlCursor"></div>
+            </div>
+            <input class="tl-range" id="timeRange" type="range" min="0" max="1439" step="1" value="810" aria-label="Time of day" aria-valuetext="1:30 PM">
+            <div class="tl-axis" aria-hidden="true"><span style="left:0">12 AM</span><span style="left:25%">6 AM</span><span style="left:50%">Noon</span><span style="left:75%">6 PM</span><span style="left:100%">12 AM</span></div>
+            <div class="tl-legend"><span><i style="background:var(--sun)"></i>Solar output</span><span><i style="background:var(--ink)"></i>Home use</span><span><i style="background:var(--charge)"></i>Vault charge</span><span>Drag to scrub the day</span></div>
+          </div>
+        </div>
+        <div class="deck-read">
+          <div class="read r-solar"><span class="read-k label"><i></i>Solar</span><span class="read-v" id="vSolar">6.8<small>kW</small></span><span class="state" id="sSolar" data-s="sun">Producing</span></div>
+          <div class="read r-home"><span class="read-k label"><i></i>Home</span><span class="read-v" id="vHome">2.9<small>kW</small></span><span class="state" id="sHome">On sunlight</span></div>
+          <div class="read r-vault"><span class="read-k label"><i></i>2 Vaults</span><span class="read-v" id="vVault">84<small>%</small></span><span class="state" id="sVault" data-s="up">Charging</span></div>
+          <div class="read r-grid"><span class="read-k label"><i></i>Grid</span><span class="read-v" id="vGrid">0.0<small>kW</small></span><span class="state" id="sGrid">Standby</span></div>
+          <div class="read today"><span class="label">Today, Jul 19</span>
+            <div>Produced <b id="tProd">60.8 kWh</b></div><div>Used <b id="tUsed">52.7 kWh</b></div>
+            <div>Self-powered <b id="tSelf">98%</b></div><div>Grid balance <b id="tBal">+$0.35</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROOF ================= -->
+<section class="proof" aria-label="Solstead in numbers">
+  <div class="wrap proof-in">
+    <div class="proof-item"><span class="proof-v">4,180</span><span class="proof-k">Texas homes running on Solstead</span></div>
+    <div class="proof-item"><span class="proof-v">43.9<span> MW</span></span><span class="proof-k">installed across 8 metros since 2016</span></div>
+    <div class="proof-item"><span class="proof-v">3<span> days</span></span><span class="proof-k">typical outage backup on two Vaults</span></div>
+    <div class="proof-item"><span class="proof-v">25<span> yrs</span></span><span class="proof-k">warranty on panels, labor and output</span></div>
+  </div>
+</section>
+
+<!-- ================= SHIFTS ================= -->
+<section class="sec shifts" id="shifts">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">Two sides of the same sun</p>
+      <h2 class="h-l">Every Solstead home works two shifts.</h2>
+      <p class="lede">Panels make the power while the sun is up. Vaults spend it after dark. Here is yesterday at our demo home in Round Rock, straight from the simulator above.</p>
+    </header>
+    <div class="shift-pair">
+      <article class="shift shift-day" tabindex="0">
+        <svg class="shift-art" viewBox="0 0 340 340" aria-hidden="true">
+          <defs><mask id="dayCut"><rect width="340" height="340" fill="#fff"/><g fill="#000"><rect y="196" width="340" height="9"/><rect y="226" width="340" height="9"/><rect y="254" width="340" height="9"/><rect y="280" width="340" height="9"/></g></mask></defs>
+          <circle cx="170" cy="170" r="150" fill="#FFB21A" mask="url(#dayCut)"/>
+        </svg>
+        <p class="label">Day shift · <span id="dRange">6:43 AM – 8:33 PM</span></p>
+        <h3>Panels at work</h3>
+        <div class="shift-big"><b id="dBig">60.8</b><span>kWh harvested</span></div>
+        <div class="shift-spark"><svg viewBox="0 0 300 64" preserveAspectRatio="none" aria-hidden="true"><path id="dSpark" fill="#FFB21A" fill-opacity=".45" stroke="#1A1300" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
+        <ul class="shift-rows">
+          <li><span>House ran straight off the roof</span><b id="dDirect">30.2 kWh</b></li>
+          <li><span>Vaults filled to 100% by</span><b id="dFull">2:30 PM</b></li>
+          <li><span>Extra sold back to the grid</span><b id="dExport">7.8 kWh</b></li>
+        </ul>
+      </article>
+      <article class="shift shift-night" tabindex="0">
+        <svg class="shift-art" viewBox="0 0 300 300" aria-hidden="true">
+          <defs><mask id="moonCut"><rect width="300" height="300" fill="#fff"/><circle cx="200" cy="110" r="96" fill="#000"/></mask></defs>
+          <circle cx="160" cy="140" r="104" fill="#DCE3EE" mask="url(#moonCut)" opacity=".9"/>
+          <g fill="#DCE3EE"><circle cx="60" cy="40" r="2"/><circle cx="250" cy="250" r="1.6"/><circle cx="30" cy="200" r="1.4"/><circle cx="120" cy="270" r="1.8"/><circle cx="270" cy="40" r="1.4"/></g>
+        </svg>
+        <p class="label">Night shift · <span id="nRange">8:33 PM – 6:43 AM</span></p>
+        <h3>Vaults take over</h3>
+        <div class="shift-big"><b id="nBig">15.2</b><span>kWh from the Vaults</span></div>
+        <div class="shift-spark"><svg viewBox="0 0 300 64" preserveAspectRatio="none" aria-hidden="true"><path id="nSpark" fill="#46DDB3" fill-opacity=".3" stroke="#46DDB3" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
+        <ul class="shift-rows">
+          <li><span>Power pulled from the grid overnight</span><b id="nGrid">0.0 kWh</b></li>
+          <li><span>Vault charge at sunrise</span><b id="nSoc">24%</b></li>
+          <li><span>Kept back as storm reserve</span><b>20%</b></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW ================= -->
+<section class="sec how" id="how">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">From roof scan to power-on</p>
+      <h2 class="h-l">Five steps. About five weeks.</h2>
+      <p class="lede">One Solstead crew owns your project from the first measurement to the day the utility signs off. Scroll to watch the roof come together.</p>
+    </header>
+    <div class="how-grid">
+      <div class="how-stage-col">
+        <div class="how-stage" id="howStage" data-step="1">
+          <div class="stage-progress" id="stageProg"></div>
+          <svg id="iso" viewBox="0 0 800 640" role="img" aria-label="Isometric house showing the current install step"></svg>
+          <div class="stage-cap"><span id="stageCap">Step 1 of 5 · Roof scan</span><span id="stageDay">Day 1</span></div>
+        </div>
+      </div>
+      <ol class="how-steps" id="howSteps">
+        <li class="step active" data-step="1">
+          <div class="step-top"><span class="step-n">01</span><span class="step-when">Day 1 · 45 minutes</span></div>
+          <h3 class="h-m">Roof scan</h3>
+          <p class="body">We map your roof from satellite and drone imagery: pitch, direction, vents, and the shade from that big live oak, hour by hour across the year.</p>
+          <ul class="facts"><li>47 roof measurements</li><li>8,760-hour shade model</li><li>Free, no visit needed</li></ul>
+        </li>
+        <li class="step" data-step="2">
+          <div class="step-top"><span class="step-n">02</span><span class="step-when">Day 3</span></div>
+          <h3 class="h-m">System design</h3>
+          <p class="body">An engineer places every panel along the sun's real path over your address and sizes the Vaults to the way your house uses power, then walks you through it on a call.</p>
+          <ul class="facts"><li>18 × S-440 · 7.92 kW</li><li>11,600 kWh / year</li><li>Fixed price, in writing</li></ul>
+        </li>
+        <li class="step" data-step="3">
+          <div class="step-top"><span class="step-n">03</span><span class="step-when">Day 21 · on site</span></div>
+          <h3 class="h-m">Install day</h3>
+          <p class="body">Permits are back, so the crew arrives at 7 AM. Rails go down on flashed mounts, then panels go up row by row. Most roofs are done before the afternoon heat.</p>
+          <ul class="facts"><li>1-day install</li><li>Leak-proof flashed mounts</li><li>Our crews, no subcontractors</li></ul>
+        </li>
+        <li class="step" data-step="4">
+          <div class="step-top"><span class="step-n">04</span><span class="step-when">Day 22</span></div>
+          <h3 class="h-m">Vault and wiring</h3>
+          <p class="body">Your Vault mounts on an outside wall with conduit from the roof. It holds its own inverter and gateway, so there is no extra box in the garage.</p>
+          <ul class="facts"><li>13.5 kWh per Vault</li><li>Rated to 122°F outdoors</li><li>City inspection booked</li></ul>
+        </li>
+        <li class="step" data-step="5">
+          <div class="step-top"><span class="step-n">05</span><span class="step-when">Day 35</span></div>
+          <h3 class="h-m">Power on</h3>
+          <p class="body">Once the utility grants permission to operate, we switch the system on and set up your app. From that moment your roof is a small power plant.</p>
+          <ul class="facts"><li>Permission to operate</li><li>App live the same hour</li><li>First bill credit next cycle</li></ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HARDWARE ================= -->
+<section class="sec hardware" id="hardware">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">Hardware</p>
+      <h2 class="h-l">Rated for 110° summers and golf-ball hail.</h2>
+      <p class="lede">We use two pieces of hardware on every home and test both against the worst Texas weather on record.</p>
+    </header>
+    <div class="hw-grid">
+      <article class="hw">
+        <div class="hw-visual" aria-hidden="true">
+          <div class="vault3d">
+            <div class="vault-unit"><div class="vault-led"><i id="hwLed1"></i></div>
+              <svg class="vault-logo" viewBox="0 0 48 48"><path d="M5.5 24.5 24 10l18.5 14.5" fill="none" stroke="var(--muted)" stroke-width="5"/></svg></div>
+            <div class="vault-unit small"><div class="vault-led"><i id="hwLed2"></i></div>
+              <svg class="vault-logo" viewBox="0 0 48 48"><path d="M5.5 24.5 24 10l18.5 14.5" fill="none" stroke="var(--muted)" stroke-width="5"/></svg>
+              <div class="vault-soc">Live charge<b id="hwSoc">84%</b></div></div>
+          </div>
+        </div>
+        <div class="hw-body">
+          <p class="eyebrow">Home power station</p>
+          <h3 class="h-m">Solstead Vault</h3>
+          <p>A battery, inverter and backup gateway in one sealed wall unit. It fills up with afternoon sun, runs the house through the night, and takes over in 20 milliseconds when the grid drops.</p>
+          <dl class="specs">
+            <div><dt>Capacity</dt><dd>13.5 kWh</dd></div>
+            <div><dt>Continuous power</dt><dd>11.5 kW</dd></div>
+            <div><dt>Outage switchover</dt><dd>&lt; 20 ms</dd></div>
+            <div><dt>Operating range</dt><dd>−4 to 122°F</dd></div>
+            <div><dt>Stacks up to</dt><dd>4 · 54 kWh</dd></div>
+            <div><dt>Warranty</dt><dd>15 years</dd></div>
+          </dl>
+        </div>
+      </article>
+      <article class="hw">
+        <div class="hw-visual" aria-hidden="true">
+          <div class="panel3d"><svg viewBox="0 0 250 300" id="panelArt"></svg></div>
+        </div>
+        <div class="hw-body">
+          <p class="eyebrow">Solar module</p>
+          <h3 class="h-m">Solstead S-440</h3>
+          <p>A 440-watt bifacial panel with half-cut cells. It loses less output in the heat than most panels, which matters on a roof that hits 160°F in August.</p>
+          <dl class="specs">
+            <div><dt>Power</dt><dd>440 W</dd></div>
+            <div><dt>Efficiency</dt><dd>22.5%</dd></div>
+            <div><dt>Heat loss per °C</dt><dd>−0.29%</dd></div>
+            <div><dt>Hail tested</dt><dd>55 mm @ 30 m/s</dd></div>
+            <div><dt>Wind load</dt><dd>2,400 Pa</dd></div>
+            <div><dt>Output at year 25</dt><dd>≥ 88%</dd></div>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PLANS ================= -->
+<section class="sec plans" id="plans">
+  <div class="wrap">
+    <div class="plans-top">
+      <header class="sec-head">
+        <p class="eyebrow">Plans</p>
+        <h2 class="h-l">Pick the size of your power plant.</h2>
+      </header>
+      <div class="seg" role="radiogroup" aria-label="Price display">
+        <input type="radio" name="pay" id="payBuy" value="buy" checked><label for="payBuy">Buy outright</label>
+        <input type="radio" name="pay" id="payFin" value="fin"><label for="payFin">Monthly · $0 down</label>
+      </div>
+    </div>
+    <div class="plan-grid" id="planGrid"></div>
+    <p class="fine">Prices shown are illustrative for this concept and assume a single-story composition-shingle roof. Monthly figures use 6.99% APR over 25 years with $0 down. Your fixed quote comes after the roof scan.</p>
+  </div>
+</section>
+
+<!-- ================= SAVINGS ================= -->
+<section class="sec calc" id="savings">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow">Savings calculator</p>
+      <h2 class="h-l">What would your roof earn?</h2>
+      <p class="lede">Move the bill slider. We size the system to cover your usage, then run 25 years of Texas rates with a 3.5% yearly increase.</p>
+    </header>
+    <div class="calc-grid">
+      <form class="calc-in" id="calcForm" onsubmit="return false">
+        <div class="field">
+          <label for="cCity">Where's the house?</label>
+          <select class="select" id="cCity"></select>
+        </div>
+        <div class="field">
+          <div class="field-row"><label for="cBill">Average monthly electric bill</label><output id="cBillOut" for="cBill">$240</output></div>
+          <input class="range" id="cBill" type="range" min="60" max="600" step="10" value="240">
+          <div class="range-scale"><span>$60</span><span>$600</span></div>
+        </div>
+        <fieldset class="field">
+          <legend>Which way does your best roof face?</legend>
+          <div class="opts">
+            <input type="radio" name="dir" id="dS" value="1" checked><label for="dS">South<small>100%</small></label>
+            <input type="radio" name="dir" id="dSW" value=".97"><label for="dSW">SW / SE<small>97%</small></label>
+            <input type="radio" name="dir" id="dW" value=".88"><label for="dW">West<small>88%</small></label>
+            <input type="radio" name="dir" id="dE" value=".86"><label for="dE">East<small>86%</small></label>
+          </div>
+        </fieldset>
+        <fieldset class="field">
+          <legend>Backup Vaults</legend>
+          <div class="opts three">
+            <input type="radio" name="vaults" id="v0" value="0"><label for="v0">None<small>solar only</small></label>
+            <input type="radio" name="vaults" id="v1" value="1" checked><label for="v1">1 Vault<small>13.5 kWh</small></label>
+            <input type="radio" name="vaults" id="v2" value="2"><label for="v2">2 Vaults<small>27 kWh</small></label>
+          </div>
+        </fieldset>
+      </form>
+      <div class="calc-out" aria-live="polite">
+        <div class="res-grid">
+          <div class="res"><span class="label">System</span><span class="res-v" id="rSize">12.76 kW</span><span class="res-s" id="rPanels">29 × S-440 panels</span></div>
+          <div class="res"><span class="label">Covers</span><span class="res-v" id="rCover">100%</span><span class="res-s" id="rProd">19,000 kWh a year</span></div>
+          <div class="res"><span class="label">Installed price</span><span class="res-v" id="rCost">$47,990</span><span class="res-s" id="rMonthly">or $339/mo</span></div>
+          <div class="res hl"><span class="label">Saved, year one</span><span class="res-v" id="rSave1">$2,410</span><span class="res-s" id="rSaveMo">about $201 a month</span></div>
+          <div class="res hl"><span class="label">25-year savings</span><span class="res-v" id="rSave25">$61,400</span><span class="res-s" id="rBreak">breaks even in year 12</span></div>
+          <div class="res"><span class="label">Backup</span><span class="res-v" id="rBackup">9 hrs</span><span class="res-s" id="rCo2">7.0 t CO₂ avoided a year</span></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-head"><h3 class="h-m" style="font-size:19px">Cumulative cost over 25 years</h3>
+            <div class="chart-legend"><span><i style="background:var(--grid)"></i>Stay on the utility</span><span><i style="background:var(--sun-text)"></i>Go Solstead</span></div></div>
+          <div class="chart-wrap"><svg id="payChart" viewBox="0 0 640 280" role="img" aria-label="Cumulative cost chart"></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TEXAS ================= -->
+<section class="sec texas" id="texas">
+  <div class="wrap tx-grid">
+    <div class="tx-map">
+      <svg id="txMap" viewBox="0 0 640 604" role="img" aria-label="Map of Texas with Solstead service cities"></svg>
+      <div class="tx-legend"><span>Peak sun hours</span><i></i><span>6.2 west → 4.6 east</span></div>
+      <div class="tx-card" id="txCard" aria-live="polite"></div>
+    </div>
+    <div class="tx-facts">
+      <header class="sec-head" style="margin-bottom:28px">
+        <p class="eyebrow">Built for Texas</p>
+        <h2 class="h-l">From El Paso sun to Gulf Coast storms.</h2>
+        <p class="lede">Eight metros, one standard. Tap a city to see its sun and how many neighbors already switched.</p>
+      </header>
+      <div class="tx-fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.8V5a2 2 0 1 0-4 0v9.8a4 4 0 1 0 4 0zM12 9v8"/></svg>
+        <div><h3>Heat</h3><p>Panels mount with a 4-inch air gap and lose only 0.29% per °C, so a 104°F afternoon still looks like peak output on your app.</p></div></div>
+      <div class="tx-fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4.5 4.5 0 1 1 1.3-8.8A6 6 0 0 1 19.5 9 3.5 3.5 0 0 1 18 15.7"/><circle cx="8" cy="19" r="1.2"/><circle cx="12.5" cy="21" r="1.2"/><circle cx="16" cy="18.5" r="1.2"/></svg>
+        <div><h3>Hail</h3><p>Tempered 3.2 mm glass tested against 55 mm hailstones. If a storm still wins, the 25-year warranty covers the panel and the labor.</p></div></div>
+      <div class="tx-fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h11a3 3 0 1 0-3-3M3 16h14a3 3 0 1 1-3 3M3 12h18"/></svg>
+        <div><h3>Wind</h3><p>Coastal installs use extra rail attachments rated for 160 mph gusts, from Corpus Christi to Galveston.</p></div></div>
+      <div class="tx-fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+        <div><h3>Grid</h3><p>When ERCOT calls for conservation or the lines go down, your Vault islands the house and keeps the essentials running.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<section class="sec app" id="app">
+  <div class="wrap app-grid">
+    <div class="app-copy">
+      <p class="eyebrow">The Solstead app</p>
+      <h2 class="h-l" style="margin-top:18px">Watch your house make its own power.</h2>
+      <p class="lede" style="margin-top:18px">The phone on the right is wired to the same simulator as the house at the top of the page. Scrub the day up there and it follows.</p>
+      <ul class="app-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><div><b>Live energy flows</b><span>See what the panels make, what the house uses and where the rest goes, second by second.</span></div></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><div><b>Storm Watch</b><span>When the National Weather Service issues a severe alert for your county, Vaults charge to 100% and hold it.</span></div></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><div><b>Bill forecast</b><span>A running estimate of this month's bill and buyback credit, before the utility sends it.</span></div></li>
+      </ul>
+    </div>
+    <div class="phone" aria-label="Solstead app preview">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="ph-top"><span id="phTime">1:30 PM</span><span>Round Rock</span></div>
+        <div class="ph-greet" id="phGreet">Good afternoon. Your roof is earning.</div>
+        <div class="ph-ring">
+          <svg viewBox="0 0 150 150" aria-hidden="true"><circle class="bg" cx="75" cy="75" r="62"/><circle class="fg" id="phRing" cx="75" cy="75" r="62" stroke-dasharray="389.6" stroke-dashoffset="62"/></svg>
+          <div class="ph-ring-c"><b id="phSoc">84%</b><span id="phSocS">Vaults charging</span></div>
+        </div>
+        <div class="ph-tiles">
+          <div class="ph-tile"><span class="label">Solar</span><b id="phSolar">6.8 kW</b></div>
+          <div class="ph-tile"><span class="label">Home</span><b id="phHome">2.9 kW</b></div>
+          <div class="ph-tile"><span class="label">Grid</span><b id="phGrid">0.0 kW</b></div>
+          <div class="ph-tile"><span class="label">Saved today</span><b id="phSaved">$4.12</b></div>
+        </div>
+        <div class="ph-alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg><span><b>Storm Watch on.</b> Severe storms possible in Williamson County after 6 PM. Vaults will hold 100% until they pass.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="sec faq" id="faq" style="background:var(--bg-2)">
+  <div class="wrap faq-grid">
+    <header class="sec-head">
+      <p class="eyebrow">Questions</p>
+      <h2 class="h-l">What Texans ask us first.</h2>
+      <p class="lede">Still curious? The roof scan is free and comes with a 20-minute call with the engineer who drew your design.</p>
+    </header>
+    <div class="faq-list">
+      <details open><summary>What happens when the grid goes down?</summary><p>The Vault senses the outage and separates your home from the grid in under 20 milliseconds, so lights, Wi-Fi and the fridge stay on. Your panels keep recharging the Vault during the day. With two Vaults, most homes run their essentials for three days or more.</p></details>
+      <details><summary>How long from first call to a working system?</summary><p>About five weeks for most homes. The install itself takes one or two days. The rest is design, city permits and utility approval, and we handle all of it.</p></details>
+      <details><summary>Will the panels survive Texas hail?</summary><p>S-440 panels use 3.2 mm tempered glass and are tested against 55 mm (2.2 inch) hail at 30 meters per second. Hail damage is covered by our 25-year warranty, parts and labor.</p></details>
+      <details><summary>Do panels lose power in 100°F heat?</summary><p>All panels make a little less power when they're hot. The S-440 loses 0.29% per °C above 77°F, roughly half the loss of older panels, and our mounts leave an air gap so the panels run cooler.</p></details>
+      <details><summary>Can my HOA stop me from going solar?</summary><p>In most cases, no. Texas Property Code §202.010 limits an HOA's power to ban rooftop solar, though it can set reasonable placement rules. We prepare and submit the HOA application for you.</p></details>
+      <details><summary>Can I sell extra power back?</summary><p>Yes, in most of Texas. In deregulated areas you choose a retail plan that pays for solar buyback. Austin Energy and CPS Energy run their own programs. We'll show you the best option for your ZIP code during design.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUOTE ================= -->
+<section class="sec quote" id="quote">
+  <div class="wrap quote-grid">
+    <div>
+      <p class="eyebrow">Free roof plan</p>
+      <h2 class="h-l" style="margin-top:18px">Your roof plan in 48 hours.</h2>
+      <p class="lede" style="margin-top:18px">Send your address and a recent bill amount. An engineer will scan your roof and send back a design, a production estimate and a fixed price.</p>
+      <ol class="quote-steps">
+        <li><b>1</b>We scan your roof from imagery, no visit needed</li>
+        <li><b>2</b>You get a design, a price and a savings forecast</li>
+        <li><b>3</b>A 20-minute call to answer every question</li>
+      </ol>
+    </div>
+    <form class="qform" id="qform" novalidate>
+      <div id="qFields" style="display:grid; gap:16px">
+        <div class="f"><label for="qAddr">Street address</label><input id="qAddr" name="addr" autocomplete="street-address" placeholder="1847 Live Oak Ln" required></div>
+        <div class="two">
+          <div class="f"><label for="qZip">ZIP code</label><input id="qZip" name="zip" inputmode="numeric" autocomplete="postal-code" placeholder="78664" maxlength="5" required></div>
+          <div class="f"><label for="qBill">Monthly bill ($)</label><input id="qBill" name="bill" inputmode="numeric" value="240"></div>
+        </div>
+        <div class="f"><label for="qEmail">Email</label><input id="qEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+        <p class="err" id="qErr" role="alert"></p>
+        <button class="btn btn-ink" type="submit">Send me my roof plan <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <p class="hint">No spam and no door-knocking. One engineer, one email, one call.</p>
+      </div>
+      <div class="qdone" id="qDone" hidden>
+        <h3>Roof scan requested.</h3>
+        <p id="qDoneText">We'll look at your roof and email your plan within 48 hours.</p>
+        <p class="hint">This is a design concept, so nothing was actually sent.</p>
+        <button class="btn btn-ink" type="button" id="qReset">Start over</button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top" aria-label="Solstead Energy, back to top">
+          <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <defs>
+              <mask id="mkCutB"><rect width="48" height="48" fill="#fff"/><rect x="8" y="31" width="32" height="2.2" fill="#000"/><rect x="8" y="35.6" width="32" height="2.2" fill="#000"/></mask>
+              <clipPath id="mkClipB"><rect width="48" height="41"/></clipPath>
+            </defs>
+            <g clip-path="url(#mkClipB)"><g class="mark-disc"><path class="mark-sun" d="M12 41a12 12 0 0 1 24 0z" mask="url(#mkCutB)"/></g></g>
+            <path class="mark-ink" d="M5.5 24.5 24 10l18.5 14.5" stroke-width="5" stroke-linejoin="miter" stroke-linecap="square"/>
+            <rect class="mark-ground" x="4" y="41" width="40" height="3.2" rx="1"/>
+            <path class="mark-star" d="M39 3.5l1.2 3.3 3.3 1.2-3.3 1.2L39 12.5l-1.2-3.3L34.5 8l3.3-1.2z"/>
+          </svg>
+          <span class="brand-word"><span class="brand-name">SOLSTEAD</span><span class="brand-sub">ENERGY · TEXAS</span></span>
+        </a>
+        <p class="foot-blurb">Solar and home power stations, designed and installed by Texans. Austin · Houston · Dallas–Fort Worth · San Antonio.</p>
+      </div>
+      <div><h4>Systems</h4><ul><li><a href="#hardware">Solstead Vault</a></li><li><a href="#hardware">S-440 panels</a></li><li><a href="#plans">Plans &amp; pricing</a></li><li><a href="#app">The app</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#how">How it works</a></li><li><a href="#texas">Service area</a></li><li><a href="#faq">Questions</a></li><li><a href="#quote">Get a quote</a></li><li><a href="/404">404 page</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><span class="num" style="color:var(--ink-2)">(512) 555-0147</span></li><li><span style="color:var(--ink-2)">hello@solstead.example</span></li><li><span style="color:var(--ink-2)">Mon–Sat, 7 AM – 7 PM CT</span></li></ul></div>
+    </div>
+    <div class="foot-note"><span>© 2026 Solstead Energy. A design concept: the brand, products, prices and figures are fictional and illustrative.</span><span id="footClock">Round Rock sim time 1:30 PM</span></div>
+  </div>
+</footer>
+
+<script>
+/* ---------- 24-hour energy simulation (demo home, Round Rock TX, Jul 19) ---------- */
+const SIM = (() => {
+  const RISE = 403, SET = 1233;            // 6:43 AM, 8:33 PM CDT
+  const STEP = 5, N = 1440 / STEP;         // 5-minute samples
+  const PEAK_AC = 7.9;                     // kW, 22 x S-440 (9.68 kW DC)
+  const CAP = 27, RESERVE = 0.20, MAXP = 11.5 * 2, EFF = 0.95; // 2 Vaults
+  const LOAD = [1.4,1.3,1.2,1.15,1.1,1.2,1.6,2.1,1.9,1.6,1.7,2.0,2.3,2.6,2.9,3.2,3.5,3.8,3.9,3.4,2.9,2.4,1.9,1.6];
+
+  const loadAt = t => {
+    const h = (t / 60) % 24, i = Math.floor(h), f = h - i;
+    const a = LOAD[i], b = LOAD[(i + 1) % 24], k = (1 - Math.cos(Math.PI * f)) / 2;
+    return a + (b - a) * k;
+  };
+  const solarAt = t => {
+    if (t <= RISE || t >= SET) return 0;
+    const f = (t - RISE) / (SET - RISE);
+    return PEAK_AC * Math.pow(Math.sin(Math.PI * f), 1.5);
+  };
+  const altAt = t => {
+    if (t > RISE && t < SET) return Math.sin(Math.PI * (t - RISE) / (SET - RISE));
+    const len = 1440 - SET + RISE;
+    const n = t >= SET ? t - SET : t + 1440 - SET;
+    return -Math.sin(Math.PI * n / len);
+  };
+  const tempAt = t => 88.5 + 12.5 * Math.cos(2 * Math.PI * (t - 990) / 1440);
+
+  const solar = new Float32Array(N), load = new Float32Array(N), soc = new Float32Array(N),
+        chg = new Float32Array(N), dis = new Float32Array(N), exp = new Float32Array(N), imp = new Float32Array(N);
+  let E = CAP * 0.6;
+  const dt = STEP / 60;
+  for (let day = 0; day < 4; day++) {
+    for (let i = 0; i < N; i++) {
+      const t = i * STEP, s = solarAt(t), l = loadAt(t);
+      let c = 0, d = 0, x = 0, m = 0;
+      const net = s - l;
+      if (net >= 0) {
+        c = Math.min(net, MAXP, Math.max(0, (CAP - E) / (EFF * dt)));
+        E += c * EFF * dt; x = net - c;
+      } else {
+        d = Math.min(-net, MAXP, Math.max(0, (E - CAP * RESERVE) / dt));
+        E -= d * dt; m = -net - d;
+      }
+      if (day === 3) { solar[i] = s; load[i] = l; soc[i] = E / CAP; chg[i] = c; dis[i] = d; exp[i] = x; imp[i] = m; }
+    }
+  }
+  const lerpArr = (arr, t) => {
+    const p = ((t % 1440) + 1440) % 1440 / STEP, i = Math.floor(p), f = p - i;
+    return arr[i] + (arr[(i + 1) % N] - arr[i]) * f;
+  };
+  const at = t => ({
+    t, solar: lerpArr(solar, t), load: lerpArr(load, t), soc: lerpArr(soc, t),
+    charge: lerpArr(chg, t), discharge: lerpArr(dis, t), exp: lerpArr(exp, t), imp: lerpArr(imp, t),
+    alt: altAt(t), temp: tempAt(t)
+  });
+  const sum = (arr, from = 0, to = 1440) => { let s = 0; for (let i = 0; i < N; i++) { const t = i * STEP; if (t >= from && t < to) s += arr[i] * dt; } return s; };
+  const sumNight = arr => sum(arr, SET, 1440) + sum(arr, 0, RISE);
+  let fullAt = null; for (let i = 0; i < N; i++) { if (i * STEP > RISE && soc[i] >= 0.995) { fullAt = i * STEP; break; } }
+  const totals = {
+    produced: sum(solar), used: sum(load), exported: sum(exp), imported: sum(imp),
+    day: { produced: sum(solar, RISE, SET), used: sum(load, RISE, SET), exported: sum(exp, RISE, SET), charged: sum(chg, RISE, SET), discharged: sum(dis, RISE, SET), imported: sum(imp, RISE, SET) },
+    night: { used: sumNight(load), discharged: sumNight(dis), imported: sumNight(imp) },
+    socAtRise: lerpArr(soc, RISE), socAtSet: lerpArr(soc, SET), fullAt
+  };
+  return { RISE, SET, N, STEP, PEAK_AC, CAP, RESERVE, solar, load, soc, at, totals, altAt };
+})();
+
+
+(() => {
+'use strict';
+const root = document.documentElement;
+root.classList.add('js');
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+const toHex = c => '#' + c.map(v => Math.round(clamp(v, 0, 255)).toString(16).padStart(2, '0')).join('');
+const mix = (a, b, k) => { const A = typeof a === 'string' ? hex(a) : a, B = typeof b === 'string' ? hex(b) : b; return [A[0] + (B[0] - A[0]) * k, A[1] + (B[1] - A[1]) * k, A[2] + (B[2] - A[2]) * k]; };
+const wrapT = t => ((t % 1440) + 1440) % 1440;
+const fmtTime = t => { t = wrapT(Math.round(t)); let h = Math.floor(t / 60); const m = t % 60, ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2, '0')} ${ap}`; };
+const f1 = v => (Math.abs(v) < 0.05 ? 0 : v).toFixed(1);
+const money = v => '$' + Math.round(v).toLocaleString('en-US');
+const S = SIM;
+const DAY_T = 13 * 60 + 30, NIGHT_T = 90; // 1:30 PM and 1:30 AM
+const RATE = 0.135, BUY = 0.07;
+
+/* ================= theme: the site follows the sun ================= */
+const mqDark = matchMedia('(prefers-color-scheme: dark)');
+let theme = root.getAttribute('data-theme') || (mqDark.matches ? 'dark' : 'light');
+let selfWrite = false, fadeTimer;
+const dn = $('#dnToggle');
+function syncToggle() { dn.setAttribute('aria-checked', theme === 'dark' ? 'true' : 'false'); }
+function writeTheme(th) {
+  selfWrite = true; theme = th;
+  root.setAttribute('data-theme', th); root.dataset.night = th === 'dark' ? '1' : '0';
+  syncToggle(); queueMicrotask(() => { selfWrite = false; });
+}
+function applyTheme(th, mode, origin) {
+  if (th === theme) return;
+  if (mode === 'vt' && document.startViewTransition && !reduce) {
+    try {
+      const vt = document.startViewTransition(() => writeTheme(th));
+      vt.ready.then(() => {
+        const x = origin ? origin.x : innerWidth - 100, y = origin ? origin.y : 34;
+        const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        root.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+          { duration: 800, easing: 'cubic-bezier(.6,0,.2,1)', pseudoElement: '::view-transition-new(root)' });
+      }).catch(() => {});
+      return;
+    } catch (e) { /* fall through */ }
+  }
+  if (mode !== 'none' && !reduce) {
+    root.classList.add('theme-fade'); clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(() => root.classList.remove('theme-fade'), 950);
+  }
+  writeTheme(th);
+}
+writeTheme(theme);
+new MutationObserver(() => {
+  if (selfWrite) return;
+  const a = root.getAttribute('data-theme');
+  if (a && a !== theme) { theme = a; root.dataset.night = a === 'dark' ? '1' : '0'; syncToggle(); tweenTo(a === 'dark' ? NIGHT_T : DAY_T); }
+}).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+mqDark.addEventListener && mqDark.addEventListener('change', e => {
+  const th = e.matches ? 'dark' : 'light';
+  if (th !== theme) { applyTheme(th, 'fade'); tweenTo(th === 'dark' ? NIGHT_T : DAY_T); }
+});
+
+/* ================= scene setup ================= */
+const scene = $('#scene');
+const MAT = {
+  hillFar: ['#CBCB9A', '#16202F'], hillNear: ['#AAB27C', '#111A27'], mill: ['#5E625E', '#273041'], ground: ['#B3B57D', '#0D1520'],
+  ground2: ['#A2A56E', '#0A111A'], drive: ['#DAD3BF', '#1C2430'], trunk: ['#6A5440', '#191D25'], canopy: ['#6B8849', '#132019'],
+  canopy2: ['#80A05A', '#17261E'], trim: ['#FFFFFF', '#566075'], vault: ['#F2F3EF', '#2A3242'], vaultEdge: ['#C2C7BC', '#3B4558'],
+  wall: ['#EFE9DC', '#333B4B'], wallShade: ['#D8D0BE', '#272F3E'], stone: ['#D9CCB1', '#2C3240'], stoneLine: ['#C1B293', '#232834'],
+  shutter: ['#4E6B5C', '#1D2828'], glass: ['#9DC2DE', '#1B2434'], door: ['#7A5236', '#2A2220'], roof: ['#4A5162', '#191E29'],
+  roofLight: ['#5B6375', '#1E2430'], roofShade: ['#3A4050', '#13171F'], garageDoor: ['#F6F2E8', '#3C4454'], garageLine: ['#DCD5C5', '#2F3645'],
+  pole: ['#6E5B47', '#232934'], wire: ['#3A3A3A', '#3A4252'], shrub: ['#5D7A44', '#111C16'], cloud: ['#FFFFFF', '#26314A'],
+  panel: ['#1D2C4C', '#0B1220'], panelFrame: ['#C8D0DB', '#3A4252'], cell: ['#5C76A8', '#1A2438'], fence: ['#8A7458', '#232B37']
+};
+const NO_GOLD = { glass: 1, panel: 1, cell: 1 };
+{
+  let css = '';
+  for (const k in MAT) css += `.m-${k}{fill:var(--m-${k},${MAT[k][0]})}.m-${k}S{stroke:var(--m-${k},${MAT[k][0]})}`;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+}
+// panels: 2 rows x 11 portrait modules
+{
+  let html = '';
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 11; c++) {
+    const x = 866 + c * 32, y = 381 + r * 50;
+    html += `<rect class="m-panel m-panelFrameS" x="${x}" y="${y}" width="28" height="46" rx="1.5" stroke-width="1.4"/>` +
+      `<path class="m-cellS" fill="none" stroke-width=".9" d="M${x + 14} ${y + 2}V${y + 44}M${x + 2} ${y + 15.3}H${x + 26}M${x + 2} ${y + 30.6}H${x + 26}"/>`;
+  }
+  $('#panels').innerHTML = html;
+}
+// stars
+{
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  let html = '';
+  for (let i = 0; i < 150; i++) {
+    const x = rnd() * 1600, y = rnd() * 540, r = 0.6 + rnd() * 1.5, tw = rnd() < 0.3;
+    html += `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${r.toFixed(1)}" fill="#FFFFFF" opacity="${(0.45 + rnd() * 0.55).toFixed(2)}"${tw ? ` class="twinkle" style="--d:${(rnd() * 3).toFixed(1)}s"` : ''}/>`;
+  }
+  $('#stars').innerHTML = html;
+}
+// fence + windmill wheel
+{
+  let posts = '';
+  for (let x = 8; x < 470; x += 46) posts += `<rect class="m-fence" x="${x}" y="612" width="5" height="32"/>`;
+  $('#fence').innerHTML = posts + '<path class="m-fenceS" fill="none" stroke-width="3" d="M0 620H476M0 632H476"/>';
+  let w = '<circle class="m-millS" cx="380" cy="512" r="24" fill="none" stroke-width="2"/>';
+  for (let i = 0; i < 12; i++) {
+    const a = i / 12 * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+    w += `<path class="m-millS" stroke-width="3.2" d="M${(380 + c * 5).toFixed(1)} ${(512 + s * 5).toFixed(1)}L${(380 + c * 24).toFixed(1)} ${(512 + s * 24).toFixed(1)}"/>`;
+  }
+  $('#millWheel').innerHTML = w + '<circle class="m-mill" cx="380" cy="512" r="4"/>';
+}
+
+/* sky table: [altitude, top, mid, bottom] */
+const SKY = [
+  [-1.0, '#04070F', '#070D1A', '#0B1526'],
+  [-0.4, '#070C18', '#0B1426', '#121E33'],
+  [-0.18, '#111B36', '#1D2747', '#3A3550'],
+  [-0.06, '#24345E', '#5B5677', '#E2875A'],
+  [0.0, '#8FA9CC', '#F0A57E', '#FF9F5A'],
+  [0.1, '#7FAEDB', '#F1C7A2', '#FFC27A'],
+  [0.3, '#66A6E2', '#9CCBEE', '#DCEDF5'],
+  [1.0, '#5A9FE0', '#92C6EE', '#D5EAF5']
+];
+function skyAt(alt) {
+  for (let i = 0; i < SKY.length - 1; i++) {
+    const a = SKY[i], b = SKY[i + 1];
+    if (alt <= b[0]) { const k = clamp((alt - a[0]) / (b[0] - a[0]), 0, 1); return [mix(a[1], b[1], k), mix(a[2], b[2], k), mix(a[3], b[3], k)]; }
+  }
+  const l = SKY[SKY.length - 1]; return [hex(l[1]), hex(l[2]), hex(l[3])];
+}
+
+const mqWide = matchMedia('(min-width:1180px)'), mqPhone = matchMedia('(max-width:639px)');
+let VB = { x: 0, y: 0, w: 1600, h: 800 };
+function layoutScene() {
+  if (mqPhone.matches) { VB = { x: 590, y: 130, w: 1010, h: 670 }; scene.setAttribute('preserveAspectRatio', 'xMidYMax slice'); }
+  else { VB = { x: 0, y: 0, w: 1600, h: 800 }; scene.setAttribute('preserveAspectRatio', 'xMaxYMax slice'); }
+  scene.setAttribute('viewBox', `${VB.x} ${VB.y} ${VB.w} ${VB.h}`);
+  lastRendered = -1; render();
+}
+[mqWide, mqPhone].forEach(m => m.addEventListener && m.addEventListener('change', layoutScene));
+
+/* ================= deck chart ================= */
+{
+  const yk = v => 96 - v / 8.4 * 84, ys = v => 96 - v * 84;
+  let area = 'M0 96', line = '', load = '', soc = '';
+  for (let i = 0; i <= S.N; i++) {
+    const x = i * S.STEP, j = i % S.N;
+    area += `L${x} ${yk(S.solar[j]).toFixed(1)}`;
+    line += `${i ? 'L' : 'M'}${x} ${yk(S.solar[j]).toFixed(1)}`;
+    load += `${i ? 'L' : 'M'}${x} ${yk(S.load[j]).toFixed(1)}`;
+    soc += `${i ? 'L' : 'M'}${x} ${ys(S.soc[j]).toFixed(1)}`;
+  }
+  $('#tlSolar').setAttribute('d', area + 'L1440 96Z');
+  $('#tlSolarL').setAttribute('d', line);
+  $('#tlLoad').setAttribute('d', load);
+  $('#tlSoc').setAttribute('d', soc);
+  const T = S.totals;
+  $('#tProd').textContent = T.produced.toFixed(1) + ' kWh';
+  $('#tUsed').textContent = T.used.toFixed(1) + ' kWh';
+  $('#tSelf').textContent = Math.round((1 - T.imported / T.used) * 100) + '%';
+  const bal = T.exported * BUY - T.imported * RATE;
+  $('#tBal').textContent = (bal >= 0 ? '+$' : '−$') + Math.abs(bal).toFixed(2);
+}
+// cumulative savings for the phone
+const SAVED = new Float32Array(S.N + 1);
+{
+  const dt = S.STEP / 60;
+  for (let i = 0; i < S.N; i++) {
+    const t = i * S.STEP, a = S.at(t);
+    const offset = (a.solar - a.exp - a.charge) + a.discharge; // kWh the house didn't buy
+    SAVED[i + 1] = SAVED[i] + (offset * RATE + a.exp * BUY) * dt;
+  }
+}
+
+/* ================= render ================= */
+const el = {
+  hero: $('#top'), sk0: $('#sk0'), sk1: $('#sk1'), sk2: $('#sk2'), stars: $('#stars'), sunG: $('#sunG'), sunDisc: $('#sunDisc'), sunHalo: $('#sunHalo'),
+  moonG: $('#moonG'), win: $('#winGlow'), vglow: $('#vaultGlow'), glint: $('#glint'), led1: $('#led1'), led2: $('#led2'),
+  fSH: $('#fSH'), fSV: $('#fSV'), fVH: $('#fVH'), fG: $('#fG'),
+  cSolarV: $('#cSolarV'), cVaultV: $('#cVaultV'), cHomeV: $('#cHomeV'), cGridV: $('#cGridV'),
+  clock: $('#clockTime'), phase: $('#clockPhase'), range: $('#timeRange'), cursor: $('#tlCursor'), live: $('#liveText'),
+  vSolar: $('#vSolar'), vHome: $('#vHome'), vVault: $('#vVault'), vGrid: $('#vGrid'),
+  sSolar: $('#sSolar'), sHome: $('#sHome'), sVault: $('#sVault'), sGrid: $('#sGrid'),
+  phTime: $('#phTime'), phGreet: $('#phGreet'), phRing: $('#phRing'), phSoc: $('#phSoc'), phSocS: $('#phSocS'),
+  phSolar: $('#phSolar'), phHome: $('#phHome'), phGrid: $('#phGrid'), phSaved: $('#phSaved'),
+  hwLed1: $('#hwLed1'), hwLed2: $('#hwLed2'), hwSoc: $('#hwSoc'), foot: $('#footClock')
+};
+let T = theme === 'dark' ? NIGHT_T : DAY_T;
+let lastPhase = null, suppressLink = false, lastRendered = -1;
+const setText = (node, txt) => { if (node.textContent !== txt) node.textContent = txt; };
+const setHTML = (node, h) => { if (node._h !== h) { node.innerHTML = h; node._h = h; } };
+function setFlow(g, kw, reverse) {
+  const on = kw > 0.05;
+  g.classList.toggle('off', !on);
+  if (!on) return;
+  const d = clamp(2.4 / kw, 0.35, 2.8).toFixed(1) + 's', dir = reverse ? 'reverse' : 'normal';
+  if (g._d !== d) { g.style.setProperty('--dur', d); g._d = d; }
+  if (g._r !== dir) { g.style.setProperty('--dir', dir); g._r = dir; }
+}
+function setState(node, s, txt) { if (node.dataset.s !== s) node.dataset.s = s; setText(node, txt); }
+function phaseName(t) {
+  if (t < S.RISE - 30) return 'Before dawn';
+  if (t < S.RISE + 60) return 'Sunrise';
+  if (t < 690) return 'Morning';
+  if (t < 960) return 'Peak sun';
+  if (t < S.SET - 75) return 'Afternoon';
+  if (t < S.SET) return 'Golden hour';
+  if (t < S.SET + 50) return 'Dusk';
+  return 'Night';
+}
+
+function render() {
+  const t = wrapT(T);
+  if (Math.abs(t - lastRendered) < 0.02) return;
+  lastRendered = t;
+  const s = S.at(t), alt = s.alt;
+  const L = smooth(-0.14, 0.22, alt), N = 1 - smooth(-0.07, 0.06, alt);
+  const G = (alt > -0.1 && alt < 0.3) ? clamp(1 - Math.abs(alt - 0.03) / 0.17, 0, 1) : 0;
+  const stacked = !mqWide.matches;
+
+  // sky
+  const [top, mid, bot] = skyAt(alt);
+  const topH = toHex(top), midH = toHex(mid), botH = toHex(bot);
+  el.hero.style.setProperty('--sky-top', topH); el.hero.style.setProperty('--sky-mid', midH);
+  if (stacked) { el.sk0.setAttribute('stop-color', midH); el.sk1.setAttribute('stop-color', toHex(mix(mid, bot, .5))); }
+  else { el.sk0.setAttribute('stop-color', topH); el.sk1.setAttribute('stop-color', midH); }
+  el.sk2.setAttribute('stop-color', botH);
+  el.stars.setAttribute('opacity', clamp((-alt - 0.03) / 0.22, 0, 1).toFixed(3));
+
+  // sun and moon on arcs across the visible sky
+  const x0 = VB.x + 110, x1 = VB.x + VB.w - 110, hz = 670, peak = VB.y + 120;
+  const f = (t - S.RISE) / (S.SET - S.RISE);
+  if (f > -0.08 && f < 1.08) {
+    const sx = x0 + f * (x1 - x0), sy = hz - Math.sin(Math.PI * f) * (hz - peak);
+    el.sunG.setAttribute('transform', `translate(${sx.toFixed(1)} ${sy.toFixed(1)})`);
+    el.sunDisc.setAttribute('fill', toHex(mix('#FF8A3D', '#FFE9A8', smooth(0, 0.35, alt))));
+    el.sunHalo.setAttribute('opacity', (0.55 + 0.45 * smooth(0, 0.4, alt)).toFixed(2));
+  } else el.sunG.setAttribute('transform', 'translate(-400 -400)');
+  const nightLen = 1440 - S.SET + S.RISE, g = wrapT(t - S.SET) / nightLen;
+  if (g > -0.05 && g < 1.05 && alt < 0.05) {
+    const mx = x0 + g * (x1 - x0), my = hz - Math.sin(Math.PI * clamp(g, 0, 1)) * (hz - peak - 50);
+    el.moonG.setAttribute('transform', `translate(${mx.toFixed(1)} ${my.toFixed(1)})`);
+  } else el.moonG.setAttribute('transform', 'translate(-400 -400)');
+
+  // materials
+  for (const k in MAT) {
+    let c = mix(MAT[k][1], MAT[k][0], L);
+    if (G > 0 && !NO_GOLD[k]) c = mix(c, k === 'cloud' ? '#FFB385' : '#FF9A55', G * (k === 'cloud' ? 0.55 : 0.16));
+    scene.style.setProperty('--m-' + k, toHex(c));
+  }
+  el.win.setAttribute('opacity', N.toFixed(3));
+  el.vglow.setAttribute('opacity', (N * 0.85).toFixed(3));
+  el.glint.setAttribute('opacity', (smooth(0.08, 0.4, alt) * 0.55).toFixed(3));
+  const soc = s.soc, ledH = 52 * soc;
+  for (const led of [el.led1, el.led2]) { led.setAttribute('height', ledH.toFixed(1)); led.setAttribute('y', (578 + 52 - ledH).toFixed(1)); }
+
+  // flows
+  const solarHome = Math.max(0, s.solar - s.charge - s.exp);
+  setFlow(el.fSH, solarHome); setFlow(el.fSV, s.charge); setFlow(el.fVH, s.discharge);
+  setFlow(el.fG, Math.max(s.imp, s.exp), s.exp > s.imp);
+  const gridKw = s.imp - s.exp;
+  setText(el.cSolarV, f1(s.solar) + ' kW');
+  setText(el.cVaultV, Math.round(soc * 100) + '% ' + (s.charge > 0.05 ? '▲' : s.discharge > 0.05 ? '▼' : '■'));
+  setText(el.cHomeV, f1(s.load) + ' kW');
+  setText(el.cGridV, (gridKw > 0.05 ? '+' : gridKw < -0.05 ? '−' : '') + f1(Math.abs(gridKw)) + ' kW');
+
+  // deck
+  const tt = fmtTime(t);
+  setText(el.clock, tt); setText(el.phase, phaseName(t));
+  if (document.activeElement !== el.range) el.range.value = Math.round(t);
+  el.range.setAttribute('aria-valuetext', tt);
+  el.cursor.style.left = (t / 1440 * 100).toFixed(3) + '%';
+  setText(el.live, `Live demo home · Round Rock, TX · ${tt} · ${Math.round(s.temp)}°F`);
+  setHTML(el.vSolar, `${f1(s.solar)}<small>kW</small>`);
+  setHTML(el.vHome, `${f1(s.load)}<small>kW</small>`);
+  setHTML(el.vVault, `${Math.round(soc * 100)}<small>%</small>`);
+  setHTML(el.vGrid, `${gridKw < -0.05 ? '−' : ''}${f1(Math.abs(gridKw))}<small>kW</small>`);
+  if (s.solar > 0.05) setState(el.sSolar, 'sun', 'Producing'); else setState(el.sSolar, 'idle', alt > -0.06 ? 'Sun too low' : 'Resting');
+  const src = [];
+  if (solarHome > 0.05) src.push('sun'); if (s.discharge > 0.05) src.push('Vaults'); if (s.imp > 0.05) src.push('grid');
+  setState(el.sHome, src[0] === 'sun' ? 'sun' : src[0] === 'Vaults' ? 'up' : 'in',
+    src.length ? 'On ' + src.join(' + ').replace('sun', 'sunlight') : 'Idle');
+  if (s.charge > 0.05) setState(el.sVault, 'up', `Charging +${f1(s.charge)} kW`);
+  else if (s.discharge > 0.05) setState(el.sVault, 'up', `Powering home ${f1(s.discharge)} kW`);
+  else if (soc > 0.98) setState(el.sVault, 'up', 'Full · standing by');
+  else setState(el.sVault, 'idle', 'Holding storm reserve');
+  if (s.exp > 0.05) setState(el.sGrid, 'out', `Selling ${f1(s.exp)} kW`);
+  else if (s.imp > 0.05) setState(el.sGrid, 'in', `Buying ${f1(s.imp)} kW`);
+  else setState(el.sGrid, 'idle', 'Standby');
+
+  // phone + hardware mirror
+  setText(el.phTime, tt);
+  const h = t / 60;
+  setText(el.phGreet, h < 5 ? 'Late night. The Vaults have the house.' : h < 12 ? 'Good morning. Panels are waking up.' : h < 17 ? 'Good afternoon. Your roof is earning.' : h < 20.6 ? 'Good evening. Sun is setting.' : 'Good night. Running on stored sun.');
+  el.phRing.setAttribute('stroke-dashoffset', (389.6 * (1 - soc)).toFixed(1));
+  setText(el.phSoc, Math.round(soc * 100) + '%');
+  setText(el.phSocS, s.charge > 0.05 ? 'Vaults charging' : s.discharge > 0.05 ? 'Vaults powering home' : soc > 0.98 ? 'Vaults full' : 'Storm reserve held');
+  setText(el.phSolar, f1(s.solar) + ' kW'); setText(el.phHome, f1(s.load) + ' kW');
+  setText(el.phGrid, (gridKw < -0.05 ? '−' : '') + f1(Math.abs(gridKw)) + ' kW');
+  const si = t / S.STEP, sI = Math.floor(si), saved = SAVED[sI] + (SAVED[Math.min(S.N, sI + 1)] - SAVED[sI]) * (si - sI);
+  setText(el.phSaved, '$' + saved.toFixed(2));
+  const pct = Math.round(soc * 100) + '%';
+  el.hwLed1.style.height = pct; el.hwLed2.style.height = pct; setText(el.hwSoc, pct);
+  setText(el.foot, 'Round Rock sim time ' + tt);
+
+  // phase + theme link
+  const phase = alt > 0 ? 'day' : 'night';
+  if (el.hero.dataset.phase !== phase) el.hero.dataset.phase = phase;
+  if (lastPhase && phase !== lastPhase && !suppressLink) applyTheme(phase === 'day' ? 'light' : 'dark', 'fade');
+  lastPhase = phase;
+}
+
+function setTime(t) { T = wrapT(t); render(); }
+
+/* playback */
+const playBtn = $('#play'), heroPlay = $('#heroPlay');
+let playing = false, heroVisible = true, raf = 0, lastTs = 0, tweenId = 0;
+const SPEED = 1440 / 36000; // a full day in 36 seconds
+function loop(ts) {
+  if (!playing || !heroVisible) { raf = 0; return; }
+  const dt = Math.min(64, ts - (lastTs || ts)); lastTs = ts;
+  setTime(T + dt * SPEED);
+  raf = requestAnimationFrame(loop);
+}
+function kick() { if (playing && heroVisible && !raf) { lastTs = 0; raf = requestAnimationFrame(loop); } }
+function setPlaying(p) {
+  playing = p; tweenId++; suppressLink = false;
+  playBtn.setAttribute('aria-pressed', p ? 'true' : 'false');
+  playBtn.setAttribute('aria-label', p ? 'Pause the simulated day' : 'Play a simulated day');
+  heroPlay.lastChild.textContent = p ? 'Pause the day' : 'Play a Texas day';
+  kick();
+}
+playBtn.addEventListener('click', () => setPlaying(!playing));
+heroPlay.addEventListener('click', () => setPlaying(!playing));
+el.range.addEventListener('input', () => { if (playing) setPlaying(false); tweenId++; suppressLink = false; setTime(+el.range.value); });
+new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; kick(); }, { threshold: 0.05 }).observe($('#top'));
+document.addEventListener('visibilitychange', () => { heroVisible = !document.hidden; kick(); });
+
+function tweenTo(target, dur = 1700) {
+  if (playing) setPlaying(false);
+  const id = ++tweenId, from = T, delta = wrapT(target - from);
+  if (reduce || delta < 1) { setTime(target); lastPhase = alt0(); return; }
+  suppressLink = true;
+  const start = performance.now();
+  const step = now => {
+    if (id !== tweenId) return;
+    const k = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - k, 3);
+    setTime(from + delta * e);
+    if (k < 1) requestAnimationFrame(step); else suppressLink = false;
+  };
+  requestAnimationFrame(step);
+}
+const alt0 = () => (S.altAt(wrapT(T)) > 0 ? 'day' : 'night');
+dn.addEventListener('click', () => {
+  const target = theme === 'dark' ? 'light' : 'dark';
+  const r = dn.getBoundingClientRect();
+  applyTheme(target, 'vt', { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+  tweenTo(target === 'dark' ? NIGHT_T : DAY_T);
+});
+
+/* ================= shifts ================= */
+{
+  const Tt = S.totals;
+  $('#dRange').textContent = `${fmtTime(S.RISE)} – ${fmtTime(S.SET)}`;
+  $('#nRange').textContent = `${fmtTime(S.SET)} – ${fmtTime(S.RISE)}`;
+  $('#dBig').textContent = Tt.day.produced.toFixed(1);
+  $('#dDirect').textContent = (Tt.day.used - Tt.day.discharged - Tt.day.imported).toFixed(1) + ' kWh';
+  $('#dFull').textContent = Tt.fullAt ? fmtTime(Tt.fullAt) : '—';
+  $('#dExport').textContent = Tt.day.exported.toFixed(1) + ' kWh';
+  $('#nBig').textContent = Tt.night.discharged.toFixed(1);
+  $('#nGrid').textContent = Tt.night.imported.toFixed(1) + ' kWh';
+  $('#nSoc').textContent = Math.round(Tt.socAtRise * 100) + '%';
+  let d = 'M0 62', n = '';
+  for (let i = 0; i <= 60; i++) {
+    const td = S.RISE + (S.SET - S.RISE) * i / 60, x = (i * 5).toFixed(1);
+    d += `L${x} ${(62 - S.at(td).solar / 8 * 56).toFixed(1)}`;
+    const tn = S.SET + (1440 - S.SET + S.RISE) * i / 60;
+    n += `${i ? 'L' : 'M'}${x} ${(62 - S.at(wrapT(tn)).soc * 56).toFixed(1)}`;
+  }
+  $('#dSpark').setAttribute('d', d + 'L300 62Z');
+  $('#nSpark').setAttribute('d', n + 'L300 62L0 62Z');
+}
+
+/* ================= isometric install story ================= */
+{
+  const svg = $('#iso');
+  const s = 32, ox = 350, oy = 206;
+  const P = (x, y, z = 0) => [ox + (x - y) * s * 0.866, oy + (x + y) * s * 0.5 - z * s];
+  const pts = a => a.map(p => P(...p).map(v => v.toFixed(1)).join(',')).join(' ');
+  const poly = (a, style, extra = '') => `<polygon points="${pts(a)}" style="${style}" ${extra}/>`;
+  const W = 10, D = 6.4, h = 3, r = 2.4, o = 0.4, ym = D / 2, rx1 = 3.2, rx2 = 6.8;
+  const E1 = [-o, -o, h], E2 = [W + o, -o, h], E3 = [W + o, D + o, h], E4 = [-o, D + o, h], R1 = [rx1, ym, h + r], R2 = [rx2, ym, h + r];
+  const F = (x, v) => [x, (D + o) - v * (D + o - ym), h + v * r]; // point on the front roof plane
+  const tag = (x, y, k, v) => {
+    const w = Math.round(k.length * 8.2 + v.length * 9.3 + 40);
+    return `<g class="iso-tag" transform="translate(${x.toFixed(0)} ${y.toFixed(0)})"><rect x="0" y="-17" width="${w}" height="34" rx="8"/>` +
+      `<text class="iso-label-k" x="12" y="4.5">${k}</text><text class="iso-label" x="${w - 12}" y="5.5" text-anchor="end">${v}</text></g>`;
+  };
+  let base = '';
+  base += poly([[-2.4, -2.2, 0], [12.6, -2.2, 0], [12.6, 9.8, 0], [-2.4, 9.8, 0]], 'fill:var(--iso-ground)');
+  base += poly([[7.3, D, 0], [9.7, D, 0], [9.7, 9.8, 0], [7.3, 9.8, 0]], 'fill:var(--iso-ground-2)');
+  base += poly([[4.5, D, 0], [5.1, D, 0], [5.1, 9.8, 0], [4.5, 9.8, 0]], 'fill:var(--iso-ground-2)');
+  // walls
+  base += poly([[0, D, 0], [W, D, 0], [W, D, h], [0, D, h]], 'fill:var(--iso-wall-a)');
+  base += poly([[W, 0, 0], [W, D, 0], [W, D, h], [W, 0, h]], 'fill:var(--iso-wall-b)');
+  base += poly([[0, D, h - .3], [W, D, h - .3], [W, D, h], [0, D, h]], 'fill:var(--iso-wall-b)');
+  const winF = [[0.9, 2.4, 1.0, 2.3], [6.3, 7.8, 1.0, 2.3], [8.5, 9.4, 1.2, 2.3]];
+  const winR = [[1.0, 2.6, 1.0, 2.3], [3.0, 3.9, 1.2, 2.3]];
+  const winPolys = [];
+  winF.forEach(([a, b, z0, z1]) => winPolys.push([[a, D + .01, z0], [b, D + .01, z0], [b, D + .01, z1], [a, D + .01, z1]]));
+  winR.forEach(([a, b, z0, z1]) => winPolys.push([[W + .01, a, z0], [W + .01, b, z0], [W + .01, b, z1], [W + .01, a, z1]]));
+  winPolys.forEach(p => base += poly(p, 'fill:var(--iso-window);stroke:var(--iso-trim);stroke-width:2'));
+  base += poly([[4.3, D + .01, 0], [5.3, D + .01, 0], [5.3, D + .01, 2.4], [4.3, D + .01, 2.4]], 'fill:var(--iso-roof-c);stroke:var(--iso-trim);stroke-width:2');
+  // roof
+  base += poly([E1, E2, R2, R1], 'fill:var(--iso-roof-c)');
+  base += poly([E4, E1, R1], 'fill:var(--iso-roof-b)');
+  base += poly([E2, E3, R2], 'fill:var(--iso-roof-b)');
+  base += poly([E4, E3, R2, R1], 'fill:var(--iso-roof-a)', 'id="isoFront"');
+  base += `<polyline points="${pts([E4, E3, E2])}" style="fill:none;stroke:var(--iso-trim);stroke-width:3"/>`;
+  base += `<polyline points="${pts([E4, R1, R2, E3])}" style="fill:none;stroke:var(--iso-roof-c);stroke-width:2"/>`;
+  base += `<polyline points="${pts([R2, E2])}" style="fill:none;stroke:var(--iso-roof-c);stroke-width:2"/>`;
+  // live oak
+  const [tx, ty] = P(-1.3, 7.9, 0), [cx, cy] = P(-1.3, 7.9, 2.7);
+  base += `<path d="M${tx} ${ty}V${cy + 16}" style="stroke:var(--iso-trim);stroke-width:7;stroke-linecap:round"/>`;
+  [[0, 0, 40], [-34, 12, 28], [32, 10, 30], [-6, -26, 26], [18, 24, 24]].forEach(([dx, dy, rr], i) =>
+    base += `<circle cx="${cx + dx}" cy="${cy + dy}" r="${rr}" style="fill:var(${i % 2 ? '--iso-canopy-2' : '--iso-canopy'})"/>`);
+
+  // panel geometry
+  const rows = [[0.07, 0.31], [0.36, 0.60], [0.65, 0.89]], pw = 0.92, gap = 0.07;
+  const panelsGeo = [];
+  rows.forEach(([v0, v1]) => {
+    const left = -o + v1 * (rx1 + o) + 0.15, right = W + o - v1 * (W + o - rx2) - 0.15;
+    const n = Math.floor((right - left + gap) / (pw + gap)), used = n * (pw + gap) - gap, start = (W / 2) - used / 2;
+    for (let i = 0; i < n; i++) { const a = start + i * (pw + gap); panelsGeo.push({ a, b: a + pw, v0, v1 }); }
+  });
+  const nP = panelsGeo.length;
+  const panelPoly = p => [F(p.a, p.v0), F(p.b, p.v0), F(p.b, p.v1), F(p.a, p.v1)];
+
+  // layer 1: scan
+  const fx0 = P(...E4)[0], fx1 = P(...E3)[0], fyTop = P(...R1)[1], fyBot = P(...E4)[1];
+  let scan = `<defs><linearGradient id="shadeG" gradientUnits="userSpaceOnUse" x1="${fx0}" y1="0" x2="${fx1}" y2="0">` +
+    `<stop offset="0" stop-color="#2FC79C" stop-opacity=".75"/><stop offset=".28" stop-color="#FFD27A" stop-opacity=".7"/><stop offset="1" stop-color="#FFB21A" stop-opacity=".85"/></linearGradient>` +
+    `<clipPath id="isoFrontClip"><polygon points="${pts([E4, E3, R2, R1])}"/></clipPath></defs>`;
+  scan += poly([E4, E3, R2, R1], 'fill:url(#shadeG)');
+  scan += `<g clip-path="url(#isoFrontClip)"><rect class="iso-scan" x="${fx0 - 30}" y="${fyTop - 10}" width="26" height="${fyBot - fyTop + 20}" style="fill:#FFFFFF;opacity:.65"/></g>`;
+  const pe = P(5, D + o + 0.2, h - 0.2), pp = P(W + o + 0.2, 1.4, h + 1.3), pg = P(10.4, 9.2, 0), po = P(-1.3, 7.9, 4.2);
+  scan += tag(pe[0] - 70, pe[1] + 34, 'EAVE', '43 ft') + tag(pp[0] - 10, pp[1] - 8, 'PITCH', '8/12') + tag(pg[0] - 60, pg[1] + 10, 'FACES', '182° S') + tag(po[0] - 30, po[1] - 22, 'OAK SHADE', '−6%');
+
+  // layer 2: design
+  let design = panelsGeo.map(p => `<polygon class="iso-ghost" points="${pts(panelPoly(p))}"/>`).join('');
+  design += `<path d="M40 370Q400 -230 770 300" style="fill:none;stroke:var(--sun-text);stroke-width:2;stroke-dasharray:2 7;stroke-linecap:round"/>`;
+  design += `<circle cx="405" cy="52" r="15" style="fill:var(--sun)"/><circle cx="405" cy="52" r="26" style="fill:var(--sun);opacity:.25"/>`;
+  design += tag(440, 52, 'SUN PATH', 'Jul 19') + tag(pe[0] - 100, pe[1] + 34, 'LAYOUT', `${nP} × S-440 · ${(nP * 0.44).toFixed(2)} kW`);
+
+  // layer 3: rails + panels
+  let rails = '';
+  rows.forEach(([v0, v1]) => {
+    const ps = panelsGeo.filter(p => p.v0 === v0), a = ps[0].a - 0.1, b = ps[ps.length - 1].b + 0.1;
+    [v0 + (v1 - v0) * .25, v0 + (v1 - v0) * .75].forEach(v => rails += `<polyline points="${pts([F(a, v), F(b, v)])}" style="fill:none;stroke:var(--iso-trim);stroke-width:2.5"/>`);
+  });
+  let panels = '';
+  panelsGeo.forEach((p, i) => {
+    const mid = (p.v0 + p.v1) / 2, xm = (p.a + p.b) / 2;
+    panels += `<g class="iso-panel" style="--i:${i}"><polygon points="${pts(panelPoly(p))}" style="fill:var(--panel);stroke:var(--iso-trim);stroke-width:1.2"/>` +
+      `<polyline points="${pts([F(p.a + .04, mid), F(p.b - .04, mid)])}" style="fill:none;stroke:var(--panel-line);stroke-width:1"/>` +
+      `<polyline points="${pts([F(xm, p.v0 + .02), F(xm, p.v1 - .02)])}" style="fill:none;stroke:var(--panel-line);stroke-width:1"/></g>`;
+  });
+
+  // layer 4: vault + conduit
+  const X0 = W, X1 = W + 0.45, Y0 = 4.6, Y1 = 5.6, Z1 = 1.7;
+  let vault = poly([[X0, Y0, Z1], [X1, Y0, Z1], [X1, Y1, Z1], [X0, Y1, Z1]], 'fill:var(--vault-edge)');
+  vault += poly([[X0, Y1, 0], [X1, Y1, 0], [X1, Y1, Z1], [X0, Y1, Z1]], 'fill:var(--vault-edge)');
+  vault += poly([[X1, Y0, 0], [X1, Y1, 0], [X1, Y1, Z1], [X1, Y0, Z1]], 'fill:var(--vault-body);stroke:var(--vault-edge);stroke-width:1');
+  vault += `<polyline points="${pts([[X1 + .01, 5.1, .35], [X1 + .01, 5.1, 1.35]])}" style="fill:none;stroke:var(--charge-fill);stroke-width:4;stroke-linecap:round"/>`;
+  const conduitPts = pts([F(9.1, 0.04), [W + .02, 6.3, h - .05], [W + .02, 6.3, 2.2], [W + .02, 5.1, 2.2], [W + .02, 5.1, Z1]]);
+  vault += `<polyline class="iso-conduit" points="${conduitPts}"/>`;
+  const pv = P(X1, Y1, Z1);
+  vault += tag(pv[0] + 18, pv[1] - 10, 'VAULT', '13.5 kWh');
+
+  // layer 5: live
+  let live = winPolys.map(p => poly(p, 'fill:var(--sun-2);opacity:.92')).join('');
+  live += `<polyline class="iso-live-flow" points="${conduitPts}"/>`;
+  const pr = P(5, ym, h + r);
+  live += tag(pr[0] - 20, pr[1] - 54, 'SYSTEM LIVE', '6.1 kW');
+  live += tag(pe[0] - 80, pe[1] + 34, 'PTO', 'Approved ✓');
+
+  svg.innerHTML = base +
+    `<g class="layer l-scan on" data-from="1" data-to="1">${scan}</g>` +
+    `<g class="layer l-design" data-from="2" data-to="2">${design}</g>` +
+    `<g class="layer l-rails" data-from="3" data-to="9">${rails}</g>` +
+    `<g class="layer l-panels" data-from="3" data-to="9">${panels}</g>` +
+    `<g class="layer l-vault" data-from="4" data-to="9">${vault}</g>` +
+    `<g class="layer l-live" data-from="5" data-to="9">${live}</g>`;
+
+  const stage = $('#howStage'), cap = $('#stageCap'), capDay = $('#stageDay'), prog = $('#stageProg');
+  const steps = $$('#howSteps .step'), layers = $$('.layer', svg);
+  const NAMES = ['Roof scan', 'System design', 'Install day', 'Vault and wiring', 'Power on'], DAYS = ['Day 1', 'Day 3', 'Day 21', 'Day 22', 'Day 35'];
+  let cur = 1;
+  const setStep = n => {
+    if (n === cur) return; cur = n;
+    stage.dataset.step = n;
+    layers.forEach(l => l.classList.toggle('on', n >= +l.dataset.from && n <= +l.dataset.to));
+    steps.forEach(s2 => s2.classList.toggle('active', +s2.dataset.step === n));
+    cap.textContent = `Step ${n} of 5 · ${NAMES[n - 1]}`; capDay.textContent = DAYS[n - 1];
+    prog.style.width = (n * 20) + '%';
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setStep(+e.target.dataset.step); }), { rootMargin: matchMedia('(max-width:900px)').matches ? '-62% 0px -30% 0px' : '-48% 0px -48% 0px' });
+  steps.forEach(s2 => io.observe(s2));
+}
+
+/* ================= hardware: panel art ================= */
+{
+  const cols = 6, rowsN = 20, pad = 8, gx = 3, gy = 2.2, w = 250, hh = 300;
+  const cw = (w - 2 * pad - (cols - 1) * gx) / cols, ch = (hh - 2 * pad - (rowsN - 1) * gy - 6) / rowsN;
+  let c = `<defs><linearGradient id="pGlare" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".22"/><stop offset=".45" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".75" stop-color="#FFFFFF" stop-opacity=".08"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient></defs>`;
+  c += `<rect width="${w}" height="${hh}" rx="6" style="fill:var(--vault-edge)"/><rect x="4" y="4" width="${w - 8}" height="${hh - 8}" rx="3" style="fill:var(--panel)"/>`;
+  for (let r = 0; r < rowsN; r++) for (let k = 0; k < cols; k++) {
+    const x = pad + k * (cw + gx), y = pad + r * (ch + gy) + (r >= rowsN / 2 ? 6 : 0);
+    c += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" rx="1.2" style="fill:var(--grid);opacity:.28"/>`;
+  }
+  c += `<rect x="4" y="4" width="${w - 8}" height="${hh - 8}" rx="3" fill="url(#pGlare)"/>`;
+  $('#panelArt').innerHTML = c;
+}
+
+/* ================= plans ================= */
+const PRICE_W = 2.55, VAULT_P = 11900, APR = 0.0699;
+const pmt = (P, apr = APR, n = 300) => { const r = apr / 12; return P * r / (1 - Math.pow(1 + r, -n)); };
+const PLANS = [
+  { name: 'Porch', for: 'Smaller homes and lower bills', panels: 15, vaults: 0, feats: ['15 × S-440 panels · 6.60 kW', 'Wired Vault-ready for later', 'Live monitoring in the app', '25-year warranty, parts and labor'] },
+  { name: 'Homestead', for: 'Most 3–4 bedroom Texas homes', panels: 22, vaults: 1, pick: true, feats: ['22 × S-440 panels · 9.68 kW', '1 Vault · 13.5 kWh backup', 'Keeps fridge, lights, Wi-Fi and one AC zone on', 'Storm Watch auto-charging'] },
+  { name: 'Ranch', for: 'Big roofs, EVs, pools and shops', panels: 32, vaults: 2, feats: ['32 × S-440 panels · 14.08 kW', '2 Vaults · 27 kWh backup', 'Whole-home backup, central AC included', 'Level 2 EV charger installed'] }
+];
+const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function renderPlans() {
+  const fin = $('#payFin').checked;
+  $('#planGrid').innerHTML = PLANS.map(p => {
+    const kw = p.panels * 0.44, price = kw * 1000 * PRICE_W + p.vaults * VAULT_P;
+    const priceHTML = fin ? `<b>${money(pmt(price))}</b><span>/ month · $0 down</span>` : `<b>${money(price)}</b><span>installed</span>`;
+    const vz = p.vaults ? Array.from({ length: p.vaults }, () => '<i></i>').join('') : '<i class="none">Vault-ready</i>';
+    return `<article class="plan${p.pick ? ' pick' : ''}">${p.pick ? '<span class="plan-flag">Most installed in Texas</span>' : ''}
+      <div><h3>${p.name}</h3><p class="plan-for">${p.for}</p></div>
+      <div class="plan-viz" aria-label="${p.panels} panels and ${p.vaults} Vaults"><div class="pv-panels">${'<i></i>'.repeat(p.panels)}</div><div class="pv-vaults">${vz}</div></div>
+      <div class="plan-price">${priceHTML}</div>
+      <ul>${p.feats.map(f => `<li>${check}<span>${f}</span></li>`).join('')}</ul>
+      <a class="btn ${p.pick ? 'btn-sun' : 'btn-ghost'}" href="#quote" data-plan="${p.name}">Start with ${p.name}</a></article>`;
+  }).join('');
+}
+$$('input[name="pay"]').forEach(i => i.addEventListener('change', renderPlans));
+renderPlans();
+
+/* ================= calculator ================= */
+const CITIES = [
+  { id: 'austin', name: 'Austin', psh: 5.1, rate: 0.135, util: 'Austin Energy', installs: 860, kw: 9.6, lat: 30.27, lon: -97.74 },
+  { id: 'houston', name: 'Houston', psh: 4.6, rate: 0.158, util: 'CenterPoint area', installs: 1320, kw: 10.8, lat: 29.76, lon: -95.37 },
+  { id: 'dfw', name: 'Dallas–Fort Worth', psh: 5.0, rate: 0.156, util: 'Oncor area', installs: 1180, kw: 11.2, lat: 32.78, lon: -96.9 },
+  { id: 'sa', name: 'San Antonio', psh: 5.2, rate: 0.128, util: 'CPS Energy', installs: 540, kw: 10.1, lat: 29.42, lon: -98.49 },
+  { id: 'ep', name: 'El Paso', psh: 6.2, rate: 0.142, util: 'El Paso Electric', installs: 120, kw: 8.4, lat: 31.76, lon: -106.44 },
+  { id: 'cc', name: 'Corpus Christi', psh: 5.0, rate: 0.162, util: 'AEP Texas area', installs: 90, kw: 9.2, lat: 27.8, lon: -97.4 },
+  { id: 'lbb', name: 'Lubbock', psh: 5.8, rate: 0.148, util: 'Lubbock Power & Light', installs: 40, kw: 9.0, lat: 33.58, lon: -101.85 },
+  { id: 'mid', name: 'Midland', psh: 5.9, rate: 0.155, util: 'Oncor area', installs: 30, kw: 11.6, lat: 32.0, lon: -102.08 }
+];
+const cCity = $('#cCity'), cBill = $('#cBill'), cBillOut = $('#cBillOut');
+cCity.innerHTML = CITIES.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+function calc() {
+  const city = CITIES.find(c => c.id === cCity.value) || CITIES[0];
+  const bill = +cBill.value, orient = +$('input[name="dir"]:checked').value, vaults = +$('input[name="vaults"]:checked').value;
+  cBillOut.textContent = '$' + bill;
+  cBill.style.setProperty('--p', ((bill - 60) / (600 - 60) * 100).toFixed(1) + '%');
+  const fixed = 10, rate = city.rate;
+  const use = Math.max(0, (bill - fixed) / rate) * 12;
+  const perKw = city.psh * 365 * 0.8 * orient;
+  const panels = clamp(Math.round(use / perKw * 1000 / 440), 8, 60), kw = panels * 0.44, prod = kw * perKw;
+  const cost = kw * 1000 * PRICE_W + vaults * VAULT_P;
+  const share = [0.62, 0.88, 0.95][vaults];
+  const U = [0], Sx = [cost];
+  let cu = 0, cs = cost, be = null, save1 = 0;
+  for (let y = 1; y <= 25; y++) {
+    const r = rate * Math.pow(1.035, y - 1), p = prod * Math.pow(0.996, y - 1);
+    const used = Math.min(p, use), extra = Math.max(0, p - use);
+    const util = use * r + fixed * 12;
+    const sav = used * (share * r + (1 - share) * BUY) + extra * BUY;
+    if (y === 1) save1 = sav;
+    const pu = cu, ps = cs;
+    cu += util; cs += util - sav; U.push(cu); Sx.push(cs);
+    if (be === null && cs <= cu) be = (y - 1) + (ps - pu) / ((ps - pu) - (cs - cu));
+  }
+  $('#rSize').textContent = kw.toFixed(2) + ' kW';
+  $('#rPanels').textContent = `${panels} × S-440 panels`;
+  $('#rCover').textContent = Math.min(100, Math.round(prod / use * 100)) + '%';
+  $('#rProd').textContent = Math.round(prod).toLocaleString('en-US') + ' kWh a year';
+  $('#rCost').textContent = money(cost);
+  $('#rMonthly').textContent = `or ${money(pmt(cost))}/mo`;
+  $('#rSave1').textContent = money(save1);
+  $('#rSaveMo').textContent = `about ${money(save1 / 12)} a month`;
+  $('#rSave25').textContent = money(cu - cs);
+  $('#rBreak').textContent = be ? `breaks even in year ${Math.ceil(be)}` : 'no break-even within 25 years';
+  $('#rBackup').textContent = vaults ? Math.round(vaults * 13.5 * 0.8 / 1.2) + ' hrs' : 'None';
+  $('#rCo2').textContent = (prod / 1000 * 0.37).toFixed(1) + ' t CO₂ avoided a year';
+  drawChart(U, Sx, be);
+  const qb = $('#qBill'); if (qb && !qb.dataset.touched) qb.value = bill;
+}
+function drawChart(U, Sx, be) {
+  const svg = $('#payChart'), W = Math.round(clamp(svg.clientWidth || 640, 300, 760)), H = W < 480 ? 250 : 280, l = 52, r = 14, t = 18, b = 34;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); lastChart = [U, Sx, be];
+  const maxV = Math.max(...U, ...Sx);
+  const stepRaw = maxV / 4, mag = Math.pow(10, Math.floor(Math.log10(stepRaw)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(v => v >= stepRaw);
+  const top = Math.ceil(maxV / step) * step;
+  const X = y => l + y / 25 * (W - l - r), Y = v => H - b - v / top * (H - t - b);
+  let g = '';
+  for (let v = 0; v <= top + 1; v += step) g += `<line class="gl" x1="${l}" x2="${W - r}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}"/><text class="ax" x="${l - 8}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end">${v === 0 ? '$0' : '$' + Math.round(v / 1000) + 'k'}</text>`;
+  for (let y = 0; y <= 25; y += 5) g += `<text class="ax" x="${X(y).toFixed(1)}" y="${H - 12}" text-anchor="middle">${y === 0 ? 'Today' : 'Yr ' + y}</text>`;
+  const line = arr => arr.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join('');
+  g += `<path class="a-sol" d="${line(Sx)}L${X(25)} ${Y(0)}L${X(0)} ${Y(0)}Z"/>`;
+  g += `<path class="l-util" d="${line(U)}"/><path class="l-sol" d="${line(Sx)}"/>`;
+  if (be) {
+    const i0 = Math.floor(be), k = be - i0, v = Sx[i0] + (Sx[Math.min(25, i0 + 1)] - Sx[i0]) * k, x = X(be), y = Y(v);
+    const label = `Break-even · year ${be.toFixed(1)}`, bw = Math.round(label.length * 7.4 + 20);
+    const lx = x + 12 + bw > W - r ? x - 12 - bw : x + 12;
+    g += `<line class="be-line" x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${y.toFixed(1)}" y2="${Y(0)}"/>`;
+    g += `<rect class="be-bg" x="${lx.toFixed(1)}" y="${(y - 44).toFixed(1)}" width="${bw}" height="28" rx="6"/><text class="be-t" x="${(lx + 10).toFixed(1)}" y="${(y - 25).toFixed(1)}">${label}</text>`;
+    g += `<circle class="be-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6"/>`;
+  }
+  svg.innerHTML = g;
+}
+let lastChart = null;
+$('#calcForm').addEventListener('input', calc);
+addEventListener('resize', () => { if (lastChart) drawChart(...lastChart); });
+calc();
+
+/* ================= Texas map ================= */
+{
+  const TX = [[-103.064, 36.5], [-100, 36.5], [-100, 34.56], [-99.85, 34.54], [-99.58, 34.41], [-99.37, 34.45], [-99.2, 34.32], [-99.05, 34.21], [-98.76, 34.13], [-98.48, 34.08], [-98.1, 34.13], [-97.95, 33.95], [-97.87, 33.85], [-97.66, 33.99], [-97.45, 33.84], [-97.2, 33.74], [-97.09, 33.73], [-96.9, 33.95], [-96.6, 33.89], [-96.38, 33.72], [-96.15, 33.82], [-95.84, 33.84], [-95.56, 33.93], [-95.25, 33.86], [-94.95, 33.7], [-94.7, 33.69], [-94.48, 33.64], [-94.04, 33.55], [-94.043, 33.019], [-94.043, 31.999], [-93.93, 31.91], [-93.82, 31.72], [-93.56, 31.42], [-93.53, 31.18], [-93.56, 30.9], [-93.7, 30.6], [-93.73, 30.38], [-93.7, 30.12], [-93.83, 29.97], [-93.86, 29.7], [-94.1, 29.66], [-94.5, 29.52], [-94.78, 29.33], [-95.08, 29.08], [-95.38, 28.86], [-95.9, 28.62], [-96.4, 28.38], [-96.8, 28.12], [-97.02, 27.88], [-97.23, 27.6], [-97.38, 27.25], [-97.43, 26.9], [-97.32, 26.5], [-97.18, 26.1], [-97.15, 25.95], [-97.42, 25.86], [-97.65, 26.02], [-97.95, 26.06], [-98.3, 26.2], [-98.6, 26.25], [-98.9, 26.37], [-99.12, 26.53], [-99.23, 26.85], [-99.45, 27.05], [-99.5, 27.5], [-99.7, 27.7], [-99.9, 27.9], [-100.2, 28.2], [-100.4, 28.55], [-100.65, 29.0], [-100.95, 29.4], [-101.4, 29.77], [-101.8, 29.8], [-102.3, 29.88], [-102.68, 29.7], [-102.9, 29.25], [-103.15, 28.98], [-103.4, 29.05], [-103.8, 29.28], [-104.2, 29.48], [-104.55, 29.8], [-104.7, 30.2], [-104.9, 30.6], [-105.3, 30.85], [-105.7, 31.15], [-106.2, 31.48], [-106.45, 31.76], [-106.62, 32.0], [-103.064, 32.0]];
+  const k = 50, pad = 24;
+  const PX = (lon, lat) => [pad + (lon + 106.65) * 0.857 * k, pad + (36.5 - lat) * k];
+  const d = TX.map((p, i) => (i ? 'L' : 'M') + PX(...p).map(v => v.toFixed(1)).join(' ')).join('') + 'Z';
+  const [wx] = PX(-106.6, 31), [ex] = PX(-93.6, 31);
+  let svg = `<defs><linearGradient id="txSun" gradientUnits="userSpaceOnUse" x1="${wx}" x2="${ex}" y1="0" y2="0"><stop offset="0" stop-color="#FFB21A" stop-opacity=".9"/><stop offset="1" stop-color="#FFB21A" stop-opacity=".16"/></linearGradient></defs>`;
+  svg += `<path class="tx-shape" d="${d}" fill="url(#txSun)"/>`;
+  const maxI = Math.max(...CITIES.map(c => c.installs));
+  CITIES.forEach(c => {
+    const [x, y] = PX(c.lon, c.lat), rr = 5 + Math.sqrt(c.installs / maxI) * 22;
+    const lx = c.id === 'cc' ? x - 12 : x + 12, anchor = c.id === 'cc' ? 'end' : 'start';
+    svg += `<g class="tx-city" tabindex="0" role="button" data-id="${c.id}" aria-label="${c.name}: ${c.installs.toLocaleString('en-US')} homes">` +
+      `<circle class="halo" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}"/><circle class="dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5"/>` +
+      `<text x="${lx.toFixed(1)}" y="${(y - 9).toFixed(1)}" text-anchor="${anchor}">${c.name}</text></g>`;
+  });
+  const map = $('#txMap'); map.innerHTML = svg;
+  const card = $('#txCard');
+  const pick = id => {
+    const c = CITIES.find(x => x.id === id);
+    $$('.tx-city', map).forEach(g => g.classList.toggle('on', g.dataset.id === id));
+    card.innerHTML = `<p class="label">Service area</p><h4>${c.name}</h4><dl>` +
+      `<div><dt>Solstead homes</dt><dd>${c.installs.toLocaleString('en-US')}</dd></div>` +
+      `<div><dt>Peak sun hours</dt><dd>${c.psh.toFixed(1)} / day</dd></div>` +
+      `<div><dt>Typical system</dt><dd>${c.kw.toFixed(1)} kW</dd></div>` +
+      `<div><dt>Utility</dt><dd>${c.util}</dd></div></dl>`;
+  };
+  $$('.tx-city', map).forEach(g => {
+    g.addEventListener('mouseenter', () => pick(g.dataset.id));
+    g.addEventListener('focus', () => pick(g.dataset.id));
+    g.addEventListener('click', () => { pick(g.dataset.id); cCity.value = g.dataset.id; calc(); });
+    g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); g.dispatchEvent(new Event('click')); } });
+  });
+  pick('austin');
+}
+
+/* ================= quote form ================= */
+{
+  const form = $('#qform'), err = $('#qErr'), fields = $('#qFields'), done = $('#qDone');
+  $('#qBill').addEventListener('input', e => { e.target.dataset.touched = '1'; });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const addr = $('#qAddr').value.trim(), zip = $('#qZip').value.trim(), email = $('#qEmail').value.trim();
+    let msg = '';
+    if (!addr) msg = 'Add your street address so we can find your roof.';
+    else if (!/^\d{5}$/.test(zip)) msg = 'Enter a 5-digit ZIP code, like 78664.';
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) msg = 'Enter an email address like you@example.com.';
+    err.textContent = msg;
+    if (msg) return;
+    $('#qDoneText').textContent = `We'll scan the roof at ${addr} and email your plan to ${email} within 48 hours.`;
+    fields.hidden = true; done.hidden = false;
+  });
+  $('#qReset').addEventListener('click', () => { form.reset(); $('#qBill').value = cBill.value; fields.hidden = false; done.hidden = true; err.textContent = ''; });
+  document.addEventListener('click', e => { const a = e.target.closest('[data-plan]'); if (a) { const p = PLANS.find(x => x.name === a.dataset.plan); if (p) $('#qAddr').placeholder = `1847 Live Oak Ln (${p.name} plan)`; } });
+}
+
+/* ================= nav ================= */
+{
+  const nav = $('#nav'), menu = $('#menuBtn'), links = $('#navLinks');
+  const onScroll = () => nav.classList.toggle('scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  menu.addEventListener('click', () => { const o = !links.classList.contains('open'); links.classList.toggle('open', o); menu.setAttribute('aria-expanded', o); });
+  links.addEventListener('click', e => { if (e.target.closest('a')) { links.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); } });
+}
+
+layoutScene();
+})();
+
+</script>
+</body>
+</html>

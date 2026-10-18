@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page not found · Solstead Energy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one screen — header, a two-column body (copy left, 4☀4 on a horizon right), a quiet footer. Same tokens as the main site. */
+:root{
+  --bg:#F3F4EE; --bg-2:#E8EBE2; --surface:#FFFFFF; --ink:#11150F; --ink-2:#384035; --muted:#5F675B; --line:#11150F1C; --line-2:#11150F3A;
+  --sun:#FFB21A; --sun-2:#FFD27A; --on-sun:#1A1300; --sun-text:#8A5200; --charge-fill:#13B38F; --focus:#11150F; --moon:#C9D2E0;
+  --o-sun:inline; --o-moon:none; --stars:0;
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif; --font-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#080C12; --bg-2:#0E141D; --surface:#111822; --ink:#EEF0E8; --ink-2:#C9CEC6; --muted:#97A0AA; --line:#EEF0E81C; --line-2:#EEF0E838;
+    --sun-text:#FFC657; --charge-fill:#2FC79C; --focus:#FFC657; --moon:#DCE3EE; --o-sun:none; --o-moon:inline; --stars:1; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#080C12; --bg-2:#0E141D; --surface:#111822; --ink:#EEF0E8; --ink-2:#C9CEC6; --muted:#97A0AA; --line:#EEF0E81C; --line-2:#EEF0E838;
+  --sun-text:#FFC657; --charge-fill:#2FC79C; --focus:#FFC657; --moon:#DCE3EE; --o-sun:none; --o-moon:inline; --stars:1; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  display:flex; flex-direction:column; min-height:100vh; transition:background-color .5s, color .5s}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus); outline-offset:3px; border-radius:3px}
+.wrap{width:100%; max-width:calc(1240px + 48px); margin-inline:auto; padding-left:max(24px, env(safe-area-inset-left,0px)); padding-right:max(24px, env(safe-area-inset-right,0px))}
+@media (max-width:560px){ .wrap{padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))} }
+
+/* header */
+.top{height:68px; display:flex; align-items:center; border-bottom:1px solid var(--line)}
+.top .wrap{display:flex; align-items:center; gap:16px}
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none}
+.brand svg{width:34px; height:34px}
+.brand-name{font-family:var(--font-display); font-stretch:125%; font-weight:850; font-size:19px; letter-spacing:.02em; line-height:1}
+.brand-sub{display:block; font-family:var(--font-display); font-stretch:75%; font-weight:600; font-size:10px; letter-spacing:.24em; color:var(--muted); margin-top:3px; line-height:1}
+.mark-sun{fill:var(--sun)} .mark-ink{fill:none; stroke:var(--ink)} .mark-ground{fill:var(--ink)}
+.mark-star{fill:var(--sun); opacity:var(--stars)}
+.top-r{margin-left:auto; display:flex; align-items:center; gap:12px}
+.dn{position:relative; width:74px; height:36px; border-radius:999px; border:1.5px solid var(--line-2); background:var(--surface); cursor:pointer; padding:0; flex:none}
+.dn svg{position:absolute; top:50%; width:16px; height:16px; margin-top:-8px; color:var(--muted)}
+.dn .s{left:10px} .dn .m{right:10px}
+.dn i{position:absolute; top:3px; left:3px; width:28px; height:28px; border-radius:50%; background:var(--sun); transition:transform .45s cubic-bezier(.2,.7,.2,1), background-color .45s; box-shadow:0 0 16px #FFB21A80}
+.dn[aria-checked="true"] i{transform:translateX(37px); background:#DCE3EE; box-shadow:0 0 14px #DCE3EE59}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:52px; padding:0 22px; border-radius:6px; border:1.5px solid transparent;
+  text-decoration:none; white-space:nowrap; font-family:var(--font-display); font-stretch:88%; font-weight:700; font-size:15px; letter-spacing:.02em; cursor:pointer}
+.btn svg{width:18px; height:18px}
+.btn-sun{background:var(--sun); color:var(--on-sun)} .btn-sun:hover{background:var(--sun-2)}
+.btn-ghost{background:var(--surface); color:var(--ink); border-color:var(--line-2)} .btn-ghost:hover{border-color:var(--ink)}
+.btn-sm{min-height:40px; padding:0 16px; font-size:14px}
+
+/* body */
+main{flex:1; display:flex; align-items:center; padding-block:clamp(48px,8vw,104px)}
+.grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:clamp(32px,6vw,96px); align-items:center}
+.copy{display:grid; gap:20px; max-width:540px}
+.eyebrow{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-stretch:75%; font-weight:650; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.eyebrow::before{content:""; width:18px; height:2px; background:var(--sun)}
+h1{margin:0; font-family:var(--font-display); font-stretch:125%; font-weight:800; font-size:clamp(34px,4.2vw,58px); line-height:.98; letter-spacing:-.025em; text-wrap:balance}
+.lede{margin:0; font-size:clamp(17px,1.3vw,19px); color:var(--ink-2); max-width:46ch}
+.cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:4px}
+.links{list-style:none; margin:16px 0 0; padding:0; border-top:1px solid var(--line)}
+.links a{display:flex; justify-content:space-between; align-items:center; gap:16px; padding:13px 0; border-bottom:1px solid var(--line); text-decoration:none; font-weight:500; color:var(--ink-2)}
+.links a span{font-family:var(--font-mono); font-size:12.5px; color:var(--muted)}
+.links a:hover{color:var(--ink)} .links a:hover span{color:var(--sun-text)}
+
+/* the numerals */
+.art{position:relative; display:grid; justify-items:center; gap:14px; min-width:0}
+.num{position:relative; display:flex; align-items:flex-end; justify-content:center; gap:.04em; font-family:var(--font-display); font-stretch:125%; font-weight:850;
+  font-size:clamp(120px,19vw,280px); line-height:.8; letter-spacing:-.03em; color:var(--ink); padding-bottom:.06em}
+.num::after{content:""; position:absolute; left:-6%; right:-6%; bottom:0; height:max(4px,.03em); background:var(--ink); border-radius:2px}
+.num .o{width:.74em; height:.74em; flex:none; margin-bottom:.0em; overflow:visible}
+.o-sun{display:var(--o-sun)} .o-moon{display:var(--o-moon)}
+.o .disc{fill:var(--sun)} .o .moon{fill:var(--moon)}
+.rise{animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{transform:translateY(18%)}to{transform:none}}
+.stars{position:absolute; inset:-14% 0 auto; height:60%; opacity:var(--stars); pointer-events:none; transition:opacity .6s}
+.stars i{position:absolute; width:3px; height:3px; border-radius:50%; background:var(--moon); animation:tw 3.4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.25}}
+.status{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 18px; font-family:var(--font-mono); font-size:12.5px; color:var(--muted)}
+.status b{font-weight:500; color:var(--ink)}
+.status .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--charge-fill); margin-right:6px; vertical-align:1px}
+
+/* footer */
+.foot{border-top:1px solid var(--line); padding-block:20px; font-size:13px; color:var(--muted)}
+.foot .wrap{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+
+@media (max-width:860px){
+  .grid{grid-template-columns:1fr}
+  .art{order:-1}
+  .copy{max-width:none}
+}
+@media (max-width:560px){ .top .btn{display:none} .brand-sub{display:none} }
+@media (prefers-reduced-motion: reduce){ .rise,.stars i{animation:none} body{transition:none} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Solstead Energy, home">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <defs>
+          <mask id="cut"><rect width="48" height="48" fill="#fff"/><rect x="8" y="31" width="32" height="2.2" fill="#000"/><rect x="8" y="35.6" width="32" height="2.2" fill="#000"/></mask>
+          <clipPath id="clip"><rect width="48" height="41"/></clipPath>
+        </defs>
+        <g clip-path="url(#clip)"><path class="mark-sun" d="M12 41a12 12 0 0 1 24 0z" mask="url(#cut)"/></g>
+        <path class="mark-ink" d="M5.5 24.5 24 10l18.5 14.5" stroke-width="5" stroke-linejoin="miter" stroke-linecap="square"/>
+        <rect class="mark-ground" x="4" y="41" width="40" height="3.2" rx="1"/>
+        <path class="mark-star" d="M39 3.5l1.2 3.3 3.3 1.2-3.3 1.2L39 12.5l-1.2-3.3L34.5 8l3.3-1.2z"/>
+      </svg>
+      <span><span class="brand-name">SOLSTEAD</span><span class="brand-sub">ENERGY · TEXAS</span></span>
+    </a>
+    <div class="top-r">
+      <button class="dn" id="dn" role="switch" aria-checked="false" aria-label="Night mode">
+        <svg class="s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="m" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7z"/></svg>
+        <i></i>
+      </button>
+      <a class="btn btn-sun btn-sm" href="/#quote">Get a quote</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap grid">
+    <div class="copy">
+      <p class="eyebrow">Error 404</p>
+      <h1>This page went off the grid.</h1>
+      <p class="lede">The link may be old, or the page has moved. The rest of the site is still running on sunshine.</p>
+      <div class="cta">
+        <a class="btn btn-sun" href="/">Back to home
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="/#quote">Get my roof plan</a>
+      </div>
+      <ul class="links" aria-label="Popular pages">
+        <li><a href="/#how">How it works <span>5 steps →</span></a></li>
+        <li><a href="/#plans">Plans and pricing <span>from $16,830 →</span></a></li>
+        <li><a href="/#savings">Savings calculator <span>25 years →</span></a></li>
+        <li><a href="/#faq">Questions <span>6 answers →</span></a></li>
+      </ul>
+    </div>
+
+    <div class="art" aria-hidden="true">
+      <div class="stars" id="stars"></div>
+      <div class="num">
+        <span>4</span>
+        <svg class="o o-sun" viewBox="0 0 100 100">
+          <defs><mask id="sunCut"><rect width="100" height="100" fill="#fff"/><rect y="58" width="100" height="5" fill="#000"/><rect y="70" width="100" height="5" fill="#000"/><rect y="81" width="100" height="5" fill="#000"/><rect y="91" width="100" height="5" fill="#000"/></mask></defs>
+          <g class="rise"><circle class="disc" cx="50" cy="50" r="50" mask="url(#sunCut)"/></g>
+        </svg>
+        <svg class="o o-moon" viewBox="0 0 100 100">
+          <defs><mask id="moonCut"><rect width="100" height="100" fill="#fff"/><circle cx="68" cy="34" r="44" fill="#000"/></mask></defs>
+          <g class="rise"><circle class="moon" cx="50" cy="50" r="50" mask="url(#moonCut)"/></g>
+        </svg>
+        <span>4</span>
+      </div>
+      <p class="status"><span><span class="dot"></span>Site <b>online</b></span><span>Page <b>not found</b></span><span>Vaults <b>100%</b></span></p>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap"><span>© 2026 Solstead Energy. A design concept, all figures illustrative.</span><span>Round Rock, TX</span></div>
+</footer>
+
+<script>
+(() => {
+  const root = document.documentElement, dn = document.getElementById('dn');
+  const mq = matchMedia('(prefers-color-scheme: dark)');
+  let theme = root.getAttribute('data-theme') || (mq.matches ? 'dark' : 'light');
+  const set = th => { theme = th; root.setAttribute('data-theme', th); dn.setAttribute('aria-checked', th === 'dark' ? 'true' : 'false'); };
+  set(theme);
+  dn.addEventListener('click', () => set(theme === 'dark' ? 'light' : 'dark'));
+  mq.addEventListener && mq.addEventListener('change', e => set(e.matches ? 'dark' : 'light'));
+  let seed = 11; const r = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  const box = document.getElementById('stars');
+  for (let i = 0; i < 22; i++) {
+    const s = document.createElement('i');
+    s.style.left = (r() * 100).toFixed(1) + '%'; s.style.top = (r() * 100).toFixed(1) + '%';
+    s.style.animationDelay = (r() * 3).toFixed(1) + 's';
+    if (r() < .35) { s.style.width = s.style.height = '2px'; }
+    box.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>
